@@ -1,0 +1,2 @@
+# 01ASCII
+Converter for hexadecimal or binary files into textfiles containing the data in form of ASCII 0s and 1s.
