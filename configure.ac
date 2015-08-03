@@ -49,7 +49,7 @@ AC_CONFIG_HEADERS(src/config.h)
 
 # switch to disable 64 support
 AC_ARG_ENABLE([64bit], AS_HELP_STRING([--disable-64bit], [Disables 64 bit support.]), 
-   AC_DEFINE([USING_32BIT], [], [Support for 32 bit.]), AC_DEFINE([USING_64BIT], [], [Support for 64 bit.]))
+   AC_DEFINE([USING_64BIT], [0], [Support for 64 bit.]), AC_DEFINE([USING_64BIT], [1], [Support for 64 bit.]))
 
 # check for c compiler and standard c library
 AC_PROG_CC
