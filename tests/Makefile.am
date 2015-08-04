@@ -41,30 +41,15 @@
 
 
 
-AC_INIT([01ASCII], [1.0], [patrick.hoislbauer@gmail.com])
-AM_INIT_AUTOMAKE([])
+if HAVE_CHECK
+TESTS = check_devicedescription
+else
+TESTS =
+endif
 
-# create config header file
-AC_CONFIG_HEADERS(src/config.h)
+noinst_PROGRAMS = check_devicedescription
+check_devicedescription_SOURCES = devicedescription_tests.c ../src/device-description.h
+check_devicedescription_CFLAGS = @CHECK_CFLAGS@ -I ../src/
+check_devicedescription_LDADD = @CHECK_LIBS@ ../src/device-description.o
 
-# switch to disable 64 support
-AC_ARG_ENABLE([64bit], AS_HELP_STRING([--disable-64bit], [Disables 64 bit support.]), 
-   AC_DEFINE([USING_64BIT], [0], [Support for 64 bit.]), AC_DEFINE([USING_64BIT], [1], [Support for 64 bit.]))
-
-# check for c compiler and standard c library
-AC_PROG_CC
-AC_HEADER_STDC
-
-# check if check is installed
-PKG_CHECK_MODULES([CHECK], [check], [have_check="yes"], [have_check="no"])
-AM_CONDITIONAL(HAVE_CHECK, test x"$have_check" = "xyes")
-
-# create makefiles
-AC_CONFIG_FILES([
-   Makefile
-   src/Makefile
-   tests/Makefile
-])
-
-AC_OUTPUT()
 
