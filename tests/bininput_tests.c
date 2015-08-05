@@ -19,9 +19,9 @@ START_TEST(readBinFileTest)
 	device.memorySize = 10;
 
 	// try to load files
-	ck_assert_int_eq(readBinFile("testfiles/nonexistentfile.bin", &device, &data), EXIT_FAILURE);
-	ck_assert_int_eq(readBinFile("testfiles/empty.bin", &device, &data), EXIT_FAILURE);
-	ck_assert_int_eq(readBinFile("testfiles/testfile.bin", &device, &data), EXIT_SUCCESS);
+	ck_assert_int_eq(readBinFile("testfiles/nonexistentfile.bin", &device, data), EXIT_FAILURE);
+	ck_assert_int_eq(readBinFile("testfiles/empty.bin", &device, data), EXIT_FAILURE);
+	ck_assert_int_eq(readBinFile("testfiles/testfile.bin", &device, data), EXIT_SUCCESS);
 
 	for(i=0; i<device.memorySize; i++)
 	{
