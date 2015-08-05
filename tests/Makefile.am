@@ -42,13 +42,17 @@
 
 
 if HAVE_CHECK
-TESTS = check_devicedescription
+TESTS = check_devicedescription check_bininput
 else
 TESTS =
 endif
 
-noinst_PROGRAMS = check_devicedescription
-check_devicedescription_SOURCES = devicedescription_tests.c ../src/device-description.h
+noinst_PROGRAMS = check_devicedescription check_bininput
+check_bininput_SOURCES = bininput_tests.c
+check_bininput_CFLAGS = @CHECK_CFLAGS@ -I ../src/
+check_bininput_LDADD = @CHECK_LIBS@ ../src/bin-input.o ../src/device-description.o
+
+check_devicedescription_SOURCES = devicedescription_tests.c
 check_devicedescription_CFLAGS = @CHECK_CFLAGS@ -I ../src/
 check_devicedescription_LDADD = @CHECK_LIBS@ ../src/device-description.o
 
