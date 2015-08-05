@@ -48,7 +48,7 @@
 // -----------------------------------------------------------------------------
 typedef struct
 {
-	char name[MAX_DEVICE_FILENAME_LENGTH];
+	char name[MAX_DEVICE_NAME_LENGTH];
 
 	// size of memory and blocks in bytes
 	uint32_64_t memorySize;
@@ -57,7 +57,8 @@ typedef struct
 	// code start address
 	uint32_64_t startAddress;
 
-	// the address is incremented by this value when accessing the next word (default is 1)
+	// the address is incremented by this value when accessing the next word
+	// (default is 1)
 	uint8_t addressStepPerWord;
 
 	// lengths of words and addresses in bits
@@ -67,8 +68,8 @@ typedef struct
 	// data and address bit orders ([2] -> program and verify)
 	int8_t wordBitOrder[2][MAX_BIT_ORDER_LENGTH];
 	int8_t wordAddressBitOrder[2][MAX_BIT_ORDER_LENGTH];
-	int8_t blockAddressBeforeDataBitOrder[2][MAX_BIT_ORDER_LENGTH];
-	int8_t blockAddressAfterDataBitOrder[2][MAX_BIT_ORDER_LENGTH];
+	int8_t preDataBlockAddrBitOrder[2][MAX_BIT_ORDER_LENGTH];
+	int8_t postDataBlockAddrBitOrder[2][MAX_BIT_ORDER_LENGTH];
 }
 deviceData;
 
