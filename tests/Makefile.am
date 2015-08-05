@@ -56,4 +56,6 @@ check_devicedescription_SOURCES = devicedescription_tests.c
 check_devicedescription_CFLAGS = @CHECK_CFLAGS@ -I ../src/
 check_devicedescription_LDADD = @CHECK_LIBS@ ../src/device-description.o
 
+clean-local:
+	-rm testdevice
 
