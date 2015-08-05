@@ -53,7 +53,7 @@
 // OUT programData: Byte array that contains the read data.
 // RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
 // -----------------------------------------------------------------------------
-int8_t	readBinFile(char *fileName, deviceData *device, uint8_t *programData)
+int	readBinFile(char *fileName, deviceData *device, uint8_t *programData)
 {
 	uint32_64_t readBytes;
 	FILE *file;

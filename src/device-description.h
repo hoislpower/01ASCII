@@ -111,11 +111,11 @@ extern const uint8_t deviceDataVersion;
 extern const uint8_t maxWordLength;
 
 
-extern	int8_t	bitOrdersAreEqual(int8_t *, int8_t *);
+extern	int	bitOrdersAreEqual(int8_t *, int8_t *);
 extern	void	printDeviceDescription(deviceData);
 extern	void	initializeDeviceData(deviceData *);
-extern	int8_t	saveDeviceDescription(deviceData *, char *);
-extern	int8_t	loadDeviceDescription(deviceData *, char *);
+extern	int	saveDeviceDescription(deviceData *, char *);
+extern	int	loadDeviceDescription(deviceData *, char *);
 
 #endif /* _DEVICE_DESCRIPTION_H */
 

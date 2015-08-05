@@ -60,9 +60,9 @@ const uint8_t maxWordLength = sizeof(uint32_64_t)*8;
 // IN bitOrder2: Array to compare
 // RETURNS: true if the bit orders are equal, false otherwise.
 // -----------------------------------------------------------------------------
-int8_t	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
+int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 {
-	uint8_t i;
+	int i;
 
 
 	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
@@ -88,7 +88,7 @@ int8_t	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 // -----------------------------------------------------------------------------
 void	printBitOrder(int8_t bitOrder[])
 {
-	uint16_t i;
+	int i;
 
 
 	// start line with 3 spaces
@@ -152,7 +152,7 @@ void	printDeviceDescription(deviceData device)
 // -----------------------------------------------------------------------------
 void	initializeDeviceData(deviceData *device)
 {
-	uint8_t i;
+	int i;
 
 
 	// set all characters of the name array to '\0'
@@ -190,9 +190,9 @@ void	initializeDeviceData(deviceData *device)
 // IN fileName: Name of the file to be written.
 // RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
 // -----------------------------------------------------------------------------
-int8_t	saveDeviceDescription(deviceData *device, char *fileName)
+int	saveDeviceDescription(deviceData *device, char *fileName)
 {
-	uint32_t writtenBytes;
+	int writtenBytes;
 	FILE *file;
 
 
@@ -249,14 +249,14 @@ int8_t	saveDeviceDescription(deviceData *device, char *fileName)
 // IN fileName: Name of the file to be read.
 // RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
 // -----------------------------------------------------------------------------
-int8_t	loadDeviceDescription(deviceData *device, char *fileName)
+int	loadDeviceDescription(deviceData *device, char *fileName)
 {
 	uint8_t	fileMaxBitOrderLength;
 	uint8_t fileVersion;
 	uint8_t fileWordLength;
 	uint8_t	readBuffer[sizeof(deviceData64)];
 	uint8_t *readPointer;
-	uint32_t readBytes;
+	int readBytes;
 	uint64_t upper4Bytes;
 	FILE *file;
 

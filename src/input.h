@@ -47,8 +47,8 @@
 #include "device-description.h"
 
 
-extern	int8_t	readBinFile(char *, deviceData *, uint8_t *);
-extern	int8_t	readHexFile(char *, deviceData *, uint8_t *);
+extern	int	readBinFile(char *, deviceData *, uint8_t *);
+extern	int	readHexFile(char *, deviceData *, uint8_t *);
 
 #endif /* _INPUT_H */
 
