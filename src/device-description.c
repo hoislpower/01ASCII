@@ -200,8 +200,8 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 	file = fopen(fileName, "wb+");
 	if(file == NULL)
 	{
-		fprintf(stderr, "ERROR: Could not create device file \
-			\"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not create device file "
+			"\"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -209,8 +209,8 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 	if(fwrite(&deviceDataVersion, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
-		fprintf(stderr, "ERROR: Could not write the version of the \
-			device file \"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not write the version of the "
+			"device file \"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -218,8 +218,8 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 	if(fwrite(&maxWordLength, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
-		fprintf(stderr, "ERROR: Could not write the maximum word \
-			length to the device file \"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not write the maximum word "
+			"length to the device file \"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -229,8 +229,8 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 
 	if(writtenBytes != sizeof(deviceData))
 	{
-		fprintf(stderr, "ERROR: Could not write to device file \"%s\"! \
-			 (wrote %u bytes)\r\n", fileName, writtenBytes);
+		fprintf(stderr, "ERROR: Could not write to device file \"%s\"! "
+			"(wrote %u bytes)\r\n", fileName, writtenBytes);
 		return EXIT_FAILURE;
 	}
 
@@ -268,8 +268,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	file = fopen(fileName, "rb");
 	if(file == NULL)
 	{
-		fprintf(stderr, "ERROR: Could not open device file \
-			\"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not open device file "
+			"\"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -277,8 +277,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	if(fread(&fileVersion, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
-		fprintf(stderr, "ERROR: Could not read the version of the \
-			device file \"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not read the version of the "
+			"device file \"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -286,8 +286,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	if(fileVersion != deviceDataVersion)
 	{
 		fclose(file);
-		printf("The device file \"%s\" has a wrong version and could \
-			not be loaded!\r\n", fileName);
+		printf("The device file \"%s\" has a wrong version and could "
+			"not be loaded!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -295,8 +295,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	if(fread(&fileWordLength, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
-		fprintf(stderr, "ERROR: Could not read the maximum word length \
-			from the device file \"%s\"!\r\n", fileName);
+		fprintf(stderr, "ERROR: Could not read the maximum word length "
+			"from the device file \"%s\"!\r\n", fileName);
 		return EXIT_FAILURE;
 	}
 
@@ -305,8 +305,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	   fileWordLength != MAX_WORD_LENGTH64)
 	{
 		fclose(file);
-		fprintf(stderr, "ERROR: The device file \"%s\" has an invalid \
-			maximum word length of %u and could not be read!\r\n", 
+		fprintf(stderr, "ERROR: The device file \"%s\" has an invalid "
+			"maximum word length of %u and could not be read!\r\n", 
 			fileName, fileWordLength);
 		return EXIT_FAILURE;
 	}
@@ -321,8 +321,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if(readBytes != sizeof(deviceData32))
 		{
 			fclose(file);
-			fprintf(stderr, "ERROR: Could not read from device \
-				file \"%s\"! (read %u bytes of %lu)\r\n", 
+			fprintf(stderr, "ERROR: Could not read from device "
+				"file \"%s\"! (read %u bytes of %lu)\r\n", 
 				fileName, readBytes, sizeof(deviceData32));
 			return EXIT_FAILURE;
 		}
@@ -337,8 +337,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if(readBytes != sizeof(deviceData64))
 		{
 			fclose(file);
-			fprintf(stderr, "ERROR: Could not read from device \
-				file \"%s\"! (read %u bytes of %lu)\r\n", 
+			fprintf(stderr, "ERROR: Could not read from device "
+				"file \"%s\"! (read %u bytes of %lu)\r\n", 
 				fileName, readBytes, sizeof(deviceData64));
 			return EXIT_FAILURE;
 		}
@@ -362,8 +362,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -387,8 +387,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -412,8 +412,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -443,8 +443,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -467,8 +467,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -491,8 +491,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -515,8 +515,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -539,8 +539,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -563,8 +563,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -587,8 +587,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
@@ -611,8 +611,8 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
 		{
 			fclose(file);
-			fprintf(stdout, "Can not use 64 bit device file \"%s\" \
-				with 32 bit version of this program!\r\n", 
+			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
+				"with 32 bit version of this program!\r\n", 
 				fileName);
 			return EXIT_FAILURE;
 		}
