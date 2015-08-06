@@ -45,9 +45,6 @@
 #define _HEX_INPUT_H
 
 
-#include <ctype.h>
-
-
 #define START_CODE				':'
 
 #define DATA_RECORD				0
