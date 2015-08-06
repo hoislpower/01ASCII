@@ -42,12 +42,16 @@
 
 
 if HAVE_CHECK
-TESTS = check_devicedescription check_bininput check_hexinput
+TESTS = check_devicedescription check_bininput check_hexinput check_scanner
 else
 TESTS =
 endif
 
-noinst_PROGRAMS = check_devicedescription check_bininput check_hexinput
+noinst_PROGRAMS = check_devicedescription check_bininput check_hexinput check_scanner
+check_scanner_SOURCES = scanner_tests.c
+check_scanner_CFLAGS = @CHECK_CFLAGS@ -I ../src/
+check_scanner_LDADD = @CHECK_LIBS@ ../src/scanner.o
+
 check_hexinput_SOURCES = hexinput_tests.c
 check_hexinput_CFLAGS = @CHECK_CFLAGS@ -I ../src/
 check_hexinput_LDADD = @CHECK_LIBS@ ../src/hex-input.o ../src/device-description.o
