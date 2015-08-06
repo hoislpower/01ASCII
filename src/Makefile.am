@@ -43,7 +43,7 @@
 
 bin_PROGRAMS = $(top_builddir)/bin/01ascii
 __top_builddir__bin_01ascii_SOURCES = main.c converter.c converter.h parser.c parser.h scanner.c 
-__top_builddir__bin_01ascii_SOURCES += scanner.h bin-input.c hex-input.c input.h device-description.c 
+__top_builddir__bin_01ascii_SOURCES += scanner.h bin-input.c hex-input.c hex-input.h input.h device-description.c 
 __top_builddir__bin_01ascii_SOURCES += device-data.h device-description.h
 
 
