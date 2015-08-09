@@ -57,8 +57,8 @@
 #define MAX_DEVICE_NAME_LENGTH	1024
 
 
-// Termination symbol for bit order arrays
-#define BIT_ORDER_END	-1
+// Symbol for bit order arrays marking unused bits
+#define UNUSED_BIT	-1
 
 
 // define maximum lengths of words and bit orders
@@ -112,6 +112,8 @@ extern const uint8_t deviceDataVersion;
 extern const uint8_t maxWordLength;
 
 
+extern	uint8_t	bitOrderLength(int8_t *);
+extern	int	bitOrderIsEmpty(int8_t *);
 extern	int	bitOrdersAreEqual(int8_t *, int8_t *);
 extern	void	printDeviceDescription(deviceData);
 extern	void	initializeDeviceData(deviceData *);

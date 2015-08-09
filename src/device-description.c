@@ -51,11 +51,51 @@ const uint8_t deviceDataVersion = 0x01;
 const uint8_t maxWordLength = sizeof(uint32_64_t)*8;
 
 
+// Get the length of a BitOrder.
+// -----------------------------------------------------------------------------
+// This function searches for the highest used bit and returns its index + 1.
+// IN bitOrder: Array whose length to be returned.
+// RETURNS: Length of the bit order.
+// -----------------------------------------------------------------------------
+uint8_t	bitOrderLength(int8_t *bitOrder)
+{
+	int i;
+	uint8_t length;
+
+
+	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
+	{
+		if(bitOrder[i] != UNUSED_BIT)
+			length = i;
+	}
+
+	return length + 1;
+}
+
+
+// Check whether a BitOrder is completely empty or not.
+// -----------------------------------------------------------------------------
+// IN bitOrder: Array to check if it is empty.
+// RETURNS: true if all elements of the array are set to UNUSED_BIT, false 
+//          otherwise.
+// -----------------------------------------------------------------------------
+int	bitOrderIsEmpty(int8_t *bitOrder)
+{
+	int i;
+
+
+	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
+	{
+		if(bitOrder[i] != UNUSED_BIT)
+			return false;
+	}
+
+	return true;
+}
+
+
 // Check whether two BitOrder arrays are equal or not.
 // -----------------------------------------------------------------------------
-// The function compares until the end of the BitOrder array 
-// (MAX_BIT_ORDER_LENGTH) or until the first occurrence of -1 which is the 
-// termination symbol of BitOrder arrays.
 // IN bitOrder1: Array to compare
 // IN bitOrder2: Array to compare
 // RETURNS: true if the bit orders are equal, false otherwise.
@@ -69,12 +109,10 @@ int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 	{
 		// compare bit by bit
 		if(bitOrder1[i] != bitOrder2[i])
+		{
+			printf("Index: %i\t %i\t %i\r\n", i, bitOrder1[i], bitOrder2[i]);
 			return false;
-
-		// exit on the first occurrence of -1
-		// -> termination of the BitOrder
-		if(bitOrder1[i] == BIT_ORDER_END)
-			return true;
+		}
 	}
 
 	return true;
@@ -83,7 +121,7 @@ int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 
 // Print a BitOrder array
 // -----------------------------------------------------------------------------
-// Print the content of the array until -1 (= end of bit order) was found.
+// Print the content of the complete array.
 // IN bitOrder: Array to print
 // -----------------------------------------------------------------------------
 void	printBitOrder(int8_t bitOrder[])
@@ -96,17 +134,14 @@ void	printBitOrder(int8_t bitOrder[])
 
 	// print all but one bits
 	i=0;
-	while((bitOrder[i+1] >= 0) && (i+1 < MAX_BIT_ORDER_LENGTH))
+	while(i < MAX_BIT_ORDER_LENGTH - 1)
 	{
 		// print bit by bit separated by a comma and a space
 		printf("%i, ", bitOrder[i]);
 		i++;
 	}
 	// print the last bit
-	if(bitOrder[i] >= 0)
-	{
-		printf("%i\r\n", bitOrder[i]);
-	}
+	printf("%i\r\n", bitOrder[i]);
 }
 
 
@@ -169,14 +204,14 @@ void	initializeDeviceData(deviceData *device)
 	// set all elements of the bit order arrays to -1
 	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
 	{
-		device->wordBitOrder[PROGRAM][i] = BIT_ORDER_END;
-		device->wordBitOrder[VERIFY][i] = BIT_ORDER_END;
-		device->wordAddressBitOrder[PROGRAM][i] = BIT_ORDER_END;
-		device->wordAddressBitOrder[VERIFY][i] = BIT_ORDER_END;
-		device->preDataBlockAddrBitOrder[PROGRAM][i] = BIT_ORDER_END;
-		device->preDataBlockAddrBitOrder[VERIFY][i] = BIT_ORDER_END;
-		device->postDataBlockAddrBitOrder[PROGRAM][i] = BIT_ORDER_END;
-		device->postDataBlockAddrBitOrder[VERIFY][i] = BIT_ORDER_END;
+		device->wordBitOrder[PROGRAM][i] = UNUSED_BIT;
+		device->wordBitOrder[VERIFY][i] = UNUSED_BIT;
+		device->wordAddressBitOrder[PROGRAM][i] = UNUSED_BIT;
+		device->wordAddressBitOrder[VERIFY][i] = UNUSED_BIT;
+		device->preDataBlockAddrBitOrder[PROGRAM][i] = UNUSED_BIT;
+		device->preDataBlockAddrBitOrder[VERIFY][i] = UNUSED_BIT;
+		device->postDataBlockAddrBitOrder[PROGRAM][i] = UNUSED_BIT;
+		device->postDataBlockAddrBitOrder[VERIFY][i] = UNUSED_BIT;
 	}
 }
 
@@ -440,7 +475,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// wordBitOrder PROGRAM
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -464,7 +499,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// wordBitOrder VERIFY
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -488,7 +523,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// wordAddressBitOrder PROGRAM
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -512,7 +547,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// wordAddressBitOrder VERIFY
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -536,7 +571,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// blockAddressBeforeDataBitOrder PROGRAM
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -560,7 +595,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// blockAddressBeforeDataBitOrder VERIFY
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -584,7 +619,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// blockAddressAfterDataBitOrder PROGRAM
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -608,7 +643,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	// blockAddressBeforeDataBitOrder VERIFY
 	if(fileWordLength > maxWordLength)
 	{
-		if((int8_t) readPointer[maxWordLength] != BIT_ORDER_END)
+		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
