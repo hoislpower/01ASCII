@@ -53,44 +53,35 @@ const uint8_t maxWordLength = sizeof(uint32_64_t)*8;
 
 // Get the length of a BitOrder.
 // -----------------------------------------------------------------------------
-// This function searches for the highest used bit and returns its index + 1.
+// This function searches for the first unused bit and returns its index + 1.
 // IN bitOrder: Array whose length to be returned.
 // RETURNS: Length of the bit order.
 // -----------------------------------------------------------------------------
 uint8_t	bitOrderLength(int8_t *bitOrder)
 {
-	int i;
 	uint8_t length;
 
 
-	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
-	{
-		if(bitOrder[i] != UNUSED_BIT)
-			length = i;
-	}
+	length = 0;
+	while((length<MAX_BIT_ORDER_LENGTH) && (bitOrder[length] != UNUSED_BIT))
+		length++;
 
-	return length + 1;
+	return length;
 }
 
 
 // Check whether a BitOrder is completely empty or not.
 // -----------------------------------------------------------------------------
 // IN bitOrder: Array to check if it is empty.
-// RETURNS: true if all elements of the array are set to UNUSED_BIT, false 
+// RETURNS: true if the first element of the array are set to UNUSED_BIT, false 
 //          otherwise.
 // -----------------------------------------------------------------------------
 int	bitOrderIsEmpty(int8_t *bitOrder)
 {
-	int i;
-
-
-	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
-	{
-		if(bitOrder[i] != UNUSED_BIT)
-			return false;
-	}
-
-	return true;
+	if(bitOrder[0] == UNUSED_BIT)
+		return true;
+	else
+		return false;
 }
 
 
@@ -116,6 +107,47 @@ int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 	}
 
 	return true;
+}
+
+
+// Check if program and verify bit orders are equal
+// -----------------------------------------------------------------------------
+// Compare the PROGRAM and VERIFY bit orders.
+// IN device: Device data structure containing the bit orders to compare.
+// RETURNS: true if the bit orders are equal, false otherwise.
+// -----------------------------------------------------------------------------
+int	programAndVerfiyBitOrdersAreEqual(deviceData *device)
+{
+	int bitOrdersAreEqual;
+	int i;
+
+
+	// loop till the end of the arrays is reached
+	// or till a difference is found
+	i=0;
+	bitOrdersAreEqual = true;
+	while((i < MAX_BIT_ORDER_LENGTH) && (bitOrdersAreEqual == true))
+	{
+		if(device->wordBitOrder[PROGRAM][i] != 
+						device->wordBitOrder[VERIFY][i])
+			bitOrdersAreEqual = false;
+		
+		if(device->wordAddressBitOrder[PROGRAM][i] != 
+					device->wordAddressBitOrder[VERIFY][i])
+			bitOrdersAreEqual = false;
+
+		if(device->preDataBlockAddrBitOrder[PROGRAM][i] != 
+				device->preDataBlockAddrBitOrder[VERIFY][i])
+			bitOrdersAreEqual = false;
+
+		if(device->postDataBlockAddrBitOrder[PROGRAM][i] != 
+				device->postDataBlockAddrBitOrder[VERIFY][i])
+			bitOrdersAreEqual = false;
+
+		i++;
+	}
+
+	return bitOrdersAreEqual;
 }
 
 

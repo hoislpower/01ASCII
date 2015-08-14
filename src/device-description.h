@@ -57,8 +57,10 @@
 #define MAX_DEVICE_NAME_LENGTH	1024
 
 
-// Symbol for bit order arrays marking unused bits
+// Symbols for bit order arrays
 #define UNUSED_BIT	-1
+#define LITERAL0_BIT	-2
+#define LITERAL1_BIT	-3
 
 
 // define maximum lengths of words and bit orders
@@ -104,7 +106,7 @@
 #endif /* USING_64BIT */
 
 
-enum {PROGRAM, VERIFY};
+enum {PROGRAM, VERIFY, PROGRAM_VERIFY};
 
 
 // version of deviceData for checking compatibility with files
@@ -115,6 +117,7 @@ extern const uint8_t maxWordLength;
 extern	uint8_t	bitOrderLength(int8_t *);
 extern	int	bitOrderIsEmpty(int8_t *);
 extern	int	bitOrdersAreEqual(int8_t *, int8_t *);
+extern	int	programAndVerfiyBitOrdersAreEqual(deviceData *);
 extern	void	printDeviceDescription(deviceData);
 extern	void	initializeDeviceData(deviceData *);
 extern	int	saveDeviceDescription(deviceData *, char *);

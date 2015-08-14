@@ -35,7 +35,6 @@ START_TEST(bitOrderLengthTest)
 
 	int8_t bitOrder2[] = {
 				0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 
-
 				0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71, 
 				  -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
 				0x03, 0x13,   -1, 0x33,   -1, 0x53, 0x63, 0x73, 
@@ -46,8 +45,8 @@ START_TEST(bitOrderLengthTest)
 
 
 	// check lengths
-	ck_assert_uint_eq(bitOrderLength(bitOrder1), 48);
-	ck_assert_uint_eq(bitOrderLength(bitOrder2), 32);
+	ck_assert_uint_eq(bitOrderLength(bitOrder1), 11);
+	ck_assert_uint_eq(bitOrderLength(bitOrder2), 16);
 
 }
 END_TEST
@@ -239,6 +238,9 @@ START_TEST(load32BitFileTest)
 	// blockAddressAfterDataBitOrder
 	ck_assert_int_eq(bitOrdersAreEqual(device.postDataBlockAddrBitOrder[PROGRAM], bitOrder), true);
 	ck_assert_int_eq(bitOrdersAreEqual(device.postDataBlockAddrBitOrder[VERIFY], bitOrder), true);
+
+	// check if program and verify bit orders are equal
+	ck_assert_int_eq(programAndVerfiyBitOrdersAreEqual(&device), true);
 }
 END_TEST
 
