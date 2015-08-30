@@ -118,7 +118,7 @@ extern	uint8_t	bitOrderLength(int8_t *);
 extern	int	bitOrderIsEmpty(int8_t *);
 extern	int	bitOrdersAreEqual(int8_t *, int8_t *);
 extern	int	programAndVerfiyBitOrdersAreEqual(deviceData *);
-extern	void	printDeviceDescription(deviceData);
+extern	void	printDeviceDescription(deviceData *);
 extern	void	initializeDeviceData(deviceData *);
 extern	int	saveDeviceDescription(deviceData *, char *);
 extern	int	loadDeviceDescription(deviceData *, char *);

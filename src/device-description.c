@@ -166,14 +166,28 @@ void	printBitOrder(int8_t bitOrder[])
 
 	// print all but one bits
 	i=0;
-	while(i < MAX_BIT_ORDER_LENGTH - 1)
+	while((bitOrder[i+1] != UNUSED_BIT) && (i+1 < MAX_BIT_ORDER_LENGTH))
 	{
 		// print bit by bit separated by a comma and a space
-		printf("%i, ", bitOrder[i]);
+		if(bitOrder[i] == LITERAL0_BIT)
+			printf("'0', ");
+		else if(bitOrder[i] == LITERAL1_BIT)
+			printf("'1', ");
+		else
+			printf("%i, ", bitOrder[i]);
 		i++;
 	}
+
 	// print the last bit
-	printf("%i\r\n", bitOrder[i]);
+	if(bitOrder[i] != UNUSED_BIT)
+	{
+		if(bitOrder[i] == LITERAL0_BIT)
+			printf("'0'\r\n, ");
+		else if(bitOrder[i] == LITERAL1_BIT)
+			printf("'1'\r\n, ");
+		else
+			printf("%i\r\n, ", bitOrder[i]);
+	}
 }
 
 
@@ -182,33 +196,33 @@ void	printBitOrder(int8_t bitOrder[])
 // Print the content of each element in the deviceData structure.
 // IN deviceData: Data to be printed.
 // -----------------------------------------------------------------------------
-void	printDeviceDescription(deviceData device)
+void	printDeviceDescription(deviceData *device)
 {
-	printf("device: %s\r\n\r\n", device.name);
-	printf("memory size:        %lu bytes\r\n", device.memorySize);
-	printf("block size:         %lu bytes\r\n", device.blockSize);
-	printf("code start address  %lu bytes\r\n", device.startAddress);
-	printf("word length:        %u bits\r\n", device.wordLength);
-	printf("address length:     %u bits\r\n", device.addressLength);
-	printf("addresses per word: %u\r\n\r\n", device.addressStepPerWord);
+	printf("device: %s\r\n\r\n", device->name);
+	printf("memory size:        %lu bytes\r\n", device->memorySize);
+	printf("block size:         %lu bytes\r\n", device->blockSize);
+	printf("code start address  %lu bytes\r\n", device->startAddress);
+	printf("word length:        %u bits\r\n", device->wordLength);
+	printf("address length:     %u bits\r\n", device->addressLength);
+	printf("addresses per word: %u\r\n\r\n", device->addressStepPerWord);
 
 
 	printf("program word bit order: \r\n");
-	printBitOrder(device.wordBitOrder[PROGRAM]);
+	printBitOrder(device->wordBitOrder[PROGRAM]);
 	printf("program word address bit order: \r\n");
-	printBitOrder(device.wordAddressBitOrder[PROGRAM]);
+	printBitOrder(device->wordAddressBitOrder[PROGRAM]);
 	printf("program block address bit order before data: \r\n");
-	printBitOrder(device.preDataBlockAddrBitOrder[PROGRAM]);
+	printBitOrder(device->preDataBlockAddrBitOrder[PROGRAM]);
 	printf("program block address bit order after data: \r\n");
-	printBitOrder(device.postDataBlockAddrBitOrder[PROGRAM]);
+	printBitOrder(device->postDataBlockAddrBitOrder[PROGRAM]);
 	printf("verify word bit order: \r\n");
-	printBitOrder(device.wordBitOrder[VERIFY]);
+	printBitOrder(device->wordBitOrder[VERIFY]);
 	printf("verify word address bit order: \r\n");
-	printBitOrder(device.wordAddressBitOrder[VERIFY]);
+	printBitOrder(device->wordAddressBitOrder[VERIFY]);
 	printf("verify block address bit order before data: \r\n");
-	printBitOrder(device.preDataBlockAddrBitOrder[VERIFY]);
+	printBitOrder(device->preDataBlockAddrBitOrder[VERIFY]);
 	printf("verify block address bit order after data: \r\n");
-	printBitOrder(device.postDataBlockAddrBitOrder[VERIFY]);
+	printBitOrder(device->postDataBlockAddrBitOrder[VERIFY]);
 }
 
 
