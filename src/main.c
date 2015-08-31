@@ -55,11 +55,11 @@
 #define GENERATE_ALL_OPTION			"-a"
 #define GENERATE_BINARY_OPTION			"-b"
 #define GENERATE_HEX_INPUT_OPTION		"-h"
-#define	GENERATE_MIN_ARGUMENT_NUM		4
+#define	GENERATE_MIN_ARGUMENT_NUM		5
 
 #define USAGE_STRING "Usage: 01ASCII compile INPUTFILE OUTPUTFILE\r\n"\
-			"       01ASCII generate [OPTION] INPUTFILE "\
-			"OUTPUTFILE\r\n\r\n       Options:\r\n       -a   "\
+			"       01ASCII generate [OPTION] DEVICEFILE INPUTFILE"\
+			" OUTPUTFILE\r\n\r\n       Options:\r\n       -a   "\
 			"Generate programming data for the whole memory space."\
 			"\r\n            Default is to skip empty blocks.\r\n"\
 			"\r\n       -b   Generate binary output files.\r\n"\
@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
 	int ascii;
 	int hexInput;
 	int generateAllBlocks;
+	char deviceFileName[FILENAME_MAX];
 	char inputFileName[FILENAME_MAX];
 	char outputFileName[FILENAME_MAX];
 	deviceData device;
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
 
 	commandFound = false;
 	nextArgument = 1;
+	strcpy(deviceFileName, "");
 	strcpy(inputFileName, "");
 	strcpy(outputFileName, "");
 
@@ -187,6 +189,9 @@ int main(int argc, char *argv[])
 			else if(strcmp(argv[nextArgument],
 						GENERATE_HEX_INPUT_OPTION) == 0)
 				hexInput = false;
+			// device file name
+			else if(strcmp(deviceFileName, "") == 0)
+				strcpy(deviceFileName, argv[nextArgument]);
 			// input file name
 			else if(strcmp(inputFileName, "") == 0)
 				strcpy(inputFileName, argv[nextArgument]);
@@ -205,6 +210,14 @@ int main(int argc, char *argv[])
 			nextArgument++;
 		}
 
+		// check if device file name has been set
+		if(strcmp(deviceFileName, "") == 0)
+		{
+			fprintf(stderr, "ERROR: Missing DEVICEFILE!\r\n");
+			fprintf(stderr, USAGE_STRING);
+			return EXIT_FAILURE;
+		}
+
 		// check if input file name has been set
 		if(strcmp(inputFileName, "") == 0)
 		{
@@ -220,6 +233,10 @@ int main(int argc, char *argv[])
 			fprintf(stderr, USAGE_STRING);
 			return EXIT_FAILURE;
 		}
+
+		// load device data
+		if(loadDeviceDescription(&device, deviceFileName)!=EXIT_SUCCESS)
+			return EXIT_FAILURE;
 
 		// allocate memory for the input data
 		if((programData = malloc(device.memorySize)) == NULL)
