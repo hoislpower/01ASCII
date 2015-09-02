@@ -128,15 +128,31 @@ int	bitArrayAdd(int8_t startBit, int8_t endBit)
 	int i;
 
 
-	// check if the length of the array will be exceeded
-	if(arrayIndex + endBit-startBit+1 > arrayLength)
-		return EXIT_FAILURE;
-
-	// add the bits to the array
-	for(i=startBit; i<=endBit; i++)
+	if(endBit >= startBit)
 	{
-		array[arrayIndex] = i;
-		arrayIndex++;
+		// check if the length of the array will be exceeded
+		if(arrayIndex + endBit-startBit+1 > arrayLength)
+			return EXIT_FAILURE;
+
+		// add the bits to the array
+		for(i=startBit; i<=endBit; i++)
+		{
+			array[arrayIndex] = i;
+			arrayIndex++;
+		}
+	}
+	else
+	{
+		// check if the length of the array will be exceeded
+		if(arrayIndex + startBit-endBit+1 > arrayLength)
+			return EXIT_FAILURE;
+
+		// add the bits to the array
+		for(i=startBit; i>=endBit; i--)
+		{
+			array[arrayIndex] = i;
+			arrayIndex++;
+		}
 	}
 
 	return EXIT_SUCCESS;

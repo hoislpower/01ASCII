@@ -970,18 +970,6 @@ int	Range(deviceData *device, int keyword)
 			return EXIT_FAILURE;
 		}
 
-		// check if the number is less than startRange
-		if(endRange < startRange)
-		{
-			fprintf(stdout, "FAILURE: The end of a bit range must "
-				"be higher or equal to the start of the range."
-				"\r\n         The number at line %i column %i "
-				"must be higher or equal to %i.\r\n",
-				getCurrentLine(), getCurrentColumn(), 
-				startRange);
-			return EXIT_FAILURE;
-		}
-
 		scanNextSymbol();
 	}
 

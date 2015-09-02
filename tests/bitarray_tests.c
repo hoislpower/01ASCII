@@ -33,9 +33,6 @@ START_TEST(bitArrayTest)
 	ck_assert_int_eq(bitArrayAdd(LITERAL1_BIT, LITERAL1_BIT), EXIT_SUCCESS);
 	ck_assert_int_eq(bitArrayAdd(5, 5), EXIT_SUCCESS);
 	ck_assert_int_eq(bitArrayAdd(LITERAL0_BIT, LITERAL0_BIT), EXIT_SUCCESS);
-	ck_assert_int_eq(bitArrayAdd(3, 6), EXIT_SUCCESS);
-
-	// try an invalid range
 	ck_assert_int_eq(bitArrayAdd(6, 3), EXIT_SUCCESS);
 
 	// try to add too much values to the array
@@ -48,10 +45,10 @@ START_TEST(bitArrayTest)
 	ck_assert_int_eq(array[0], LITERAL1_BIT);
 	ck_assert_int_eq(array[1], 5);
 	ck_assert_int_eq(array[2], LITERAL0_BIT);
-	ck_assert_int_eq(array[3], 3);
-	ck_assert_int_eq(array[4], 4);
-	ck_assert_int_eq(array[5], 5);
-	ck_assert_int_eq(array[6], 6);
+	ck_assert_int_eq(array[3], 6);
+	ck_assert_int_eq(array[4], 5);
+	ck_assert_int_eq(array[5], 4);
+	ck_assert_int_eq(array[6], 3);
 	ck_assert_int_eq(array[7], UNUSED_BIT);
 	ck_assert_int_eq(array[8], UNUSED_BIT);
 	ck_assert_int_eq(array[9], UNUSED_BIT);
@@ -75,14 +72,14 @@ START_TEST(bitArrayTest)
 	ck_assert_int_eq(array[0], LITERAL1_BIT);
 	ck_assert_int_eq(array[1], 5);
 	ck_assert_int_eq(array[2], LITERAL0_BIT);
-	ck_assert_int_eq(array[3], 3);
-	ck_assert_int_eq(array[4], 4);
-	ck_assert_int_eq(array[5], 3);
-	ck_assert_int_eq(array[6], 4);
-	ck_assert_int_eq(array[7], 3);
-	ck_assert_int_eq(array[8], 4);
-	ck_assert_int_eq(array[9], 5);
-	ck_assert_int_eq(array[10], 6);
+	ck_assert_int_eq(array[3], 6);
+	ck_assert_int_eq(array[4], 5);
+	ck_assert_int_eq(array[5], 6);
+	ck_assert_int_eq(array[6], 5);
+	ck_assert_int_eq(array[7], 6);
+	ck_assert_int_eq(array[8], 5);
+	ck_assert_int_eq(array[9], 4);
+	ck_assert_int_eq(array[10], 3);
 	ck_assert_int_eq(array[11], UNUSED_BIT);
 
 	// add one more value to the array
