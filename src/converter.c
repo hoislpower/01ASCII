@@ -140,7 +140,7 @@ int	wordToOutputString(uint32_64_t word, int8_t *bitOrder, int ascii,
 	}
 
 	// add a line break if the output string is an ascii string
-	if(ascii == true)
+	if(ascii == true && bit > 0)
 	{
 		string[bit*2] = '\r';
 		string[bit*2+1] = '\n';
@@ -214,6 +214,7 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 
 		case PROGRAM_VERIFY:
 		strcpy(fileName + strlen(fileName), "_address");
+		mode = PROGRAM; // overwrite mode
 		break;
 
 		default:
@@ -245,7 +246,7 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 		{
 			// calculate address word
 			addressWord = device->startAddress + (byte / 
-					(device->wordLength/sizeof(uint8_t)) *
+					(device->wordLength/8) *
 					device->addressStepPerWord);
 
 			// start of a new memory block...
@@ -260,8 +261,10 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 					blockAddressWord, 
 					device->preDataBlockAddrBitOrder[mode],
 					ascii, buffer);
+
 				writtenBytes = fwrite(buffer, sizeof(*buffer),
 							bufferLength, file);
+
 				if(writtenBytes != bufferLength)
 				{
 					fclose(file);
@@ -278,8 +281,9 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 			bufferLength = wordToOutputString(addressWord,
 					device->wordAddressBitOrder[mode],
 								ascii, buffer);
+
 			writtenBytes = fwrite(buffer, sizeof(*buffer),
-							bufferLength, file);
+						bufferLength, file);
 			if(writtenBytes != bufferLength)
 			{
 				fclose(file);
@@ -290,7 +294,7 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 			}
 
 			// increment byte
-			byte = byte + device->wordLength / sizeof(uint8_t);
+			byte = byte + device->wordLength / 8;
 
 
 			// end of a memory block...
@@ -302,8 +306,10 @@ int	writeAddressFile(char *fileNameBase, deviceData *device,
 					blockAddressWord,
 					device->postDataBlockAddrBitOrder[mode],
 					ascii, buffer);
+
 				writtenBytes = fwrite(buffer, sizeof(*buffer),
 							bufferLength, file);
+
 				if(writtenBytes != bufferLength)
 				{
 					fclose(file);
@@ -379,6 +385,7 @@ int	writeDataFile(char *fileNameBase, deviceData *device,
 
 		case PROGRAM_VERIFY:
 		strcpy(fileName + strlen(fileName), "_data");
+		mode = PROGRAM; // overwrite mode
 		break;
 
 		default:
@@ -411,11 +418,10 @@ int	writeDataFile(char *fileNameBase, deviceData *device,
 		{
 			// put together data word
 			dataWord = 0;
-			for(i=0; i < device->wordLength/sizeof(uint8_t); i++)
+			for(i=0; i < device->wordLength/8; i++)
 			{
-				dataWord = dataWord << sizeof(uint8_t);
-				dataWord = dataWord + programData[byte+i];
-			} 
+				dataWord += (programData[byte+i] << 8*i);
+			}
 
 			// write the data word to the file
 			bufferLength = wordToOutputString(dataWord,
@@ -432,7 +438,7 @@ int	writeDataFile(char *fileNameBase, deviceData *device,
 				return EXIT_FAILURE;
 			}
 
-			byte = byte + device->wordLength / sizeof(uint8_t);
+			byte = byte + device->wordLength/8;
 		}
 	}
 
