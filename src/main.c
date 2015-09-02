@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 			// hex file input option
 			else if(strcmp(argv[nextArgument],
 						GENERATE_HEX_INPUT_OPTION) == 0)
-				hexInput = false;
+				hexInput = true;
 			// device file name
 			else if(strcmp(deviceFileName, "") == 0)
 				strcpy(deviceFileName, argv[nextArgument]);
