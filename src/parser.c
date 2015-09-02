@@ -540,6 +540,14 @@ int	Number(deviceData *device, int keyword)
 		break;
 
 		case WORD_LENGTH:
+		// check if word length is divisible by 8
+		if(getCurrentNumberValue() % 8)
+		{
+			fprintf(stdout, "FAILURE: Word length must be divisible"
+				" by 8 at line %i column %i.\r\n", 
+				getCurrentLine(), getCurrentColumn());
+			return EXIT_FAILURE;
+		}
 		device->wordLength = getCurrentNumberValue();
 		break;
 
