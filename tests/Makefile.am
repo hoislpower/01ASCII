@@ -42,14 +42,17 @@
 
 
 if HAVE_CHECK
-TESTS = check_devicedescription check_bininput check_hexinput check_bitarray
-TESTS += check_scanner check_converter
+   TESTS = check_devicedescription check_bininput check_hexinput check_bitarray
+   TESTS += check_scanner check_converter
+
+   check_PROGRAMS = check_devicedescription check_bininput check_hexinput
+   check_PROGRAMS += check_bitarray check_scanner check_converter
 else
-TESTS =
+   TESTS = 
+
+   check_PROGRAMS = 
 endif
 
-noinst_PROGRAMS = check_devicedescription check_bininput check_hexinput
-noinst_PROGRAMS += check_bitarray check_scanner check_converter
 check_converter_SOURCES = converter_tests.c
 check_converter_CFLAGS = @CHECK_CFLAGS@ -I ../src/
 check_converter_LDADD = @CHECK_LIBS@ ../src/converter.o
@@ -76,6 +79,7 @@ check_bininput_LDADD += ../src/device-description.o
 check_devicedescription_SOURCES = devicedescription_tests.c
 check_devicedescription_CFLAGS = @CHECK_CFLAGS@ -I ../src/
 check_devicedescription_LDADD = @CHECK_LIBS@ ../src/device-description.o
+
 
 clean-local:
 	-rm testdevice
