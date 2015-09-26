@@ -41,19 +41,19 @@
 
 
 
-// -----------------------------------------------------------------------------
-// Terminal symbols: '!'   ...exclamationMarkSym
-//                   '"'   ...doubleQuoteSym
-//                   '''   ...singleQuoteSym
-//                   '-'   ...hyphenSym
-//                   '*'   ...asteriskSym
-//                   ','   ...commaSym
-//                   '('   ...leftParenthesisSym
-//                   ')'   ...rightParenthesisSym
-//                   '{'   ...leftCurlyBracketSym
-//                   '}'   ...rightCurlyBracketSym
-//                   '='   ...equalSym
-// -----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/
+/* Terminal symbols: '!'   ...exclamationMarkSym                              */
+/*                   '"'   ...doubleQuoteSym                                  */
+/*                   '''   ...singleQuoteSym                                  */
+/*                   '-'   ...hyphenSym                                       */
+/*                   '*'   ...asteriskSym                                     */
+/*                   ','   ...commaSym                                        */
+/*                   '('   ...leftParenthesisSym                              */
+/*                   ')'   ...rightParenthesisSym                             */
+/*                   '{'   ...leftCurlyBracketSym                             */
+/*                   '}'   ...rightCurlyBracketSym                            */
+/*                   '='   ...equalSym                                        */
+/*----------------------------------------------------------------------------*/
 
 
 #ifndef _SCANNER_H
@@ -66,24 +66,24 @@
 #define	MAX_IDENT_LENGTH	255
 
 
-// terminal symbols
+/* terminal symbols */
 static const char terminalSymList[] = 
 {
-	'\"',	// doubleQuoteSym
-	'\'',	// singleQuoteSym
-	'-',	// hyphenSym
-	'*',	// asteriskSym
-	',',	// commaSym
-	'(',	// leftParenthesisSym
-	')',	// rightParenthesisSym
-	'{',	// leftCurlyBracketSym
-	'}',	// rightCurlyBracketSym
-	'=',	// equalSym
-	'\0'	// no terminal symbol (just termination of the list)
+	'\"',	/* doubleQuoteSym */
+	'\'',	/* singleQuoteSym */
+	'-',	/* hyphenSym */
+	'*',	/* asteriskSym */
+	',',	/* commaSym */
+	'(',	/* leftParenthesisSym */
+	')',	/* rightParenthesisSym */
+	'{',	/* leftCurlyBracketSym */
+	'}',	/* rightCurlyBracketSym */
+	'=',	/* equalSym */
+	'\0'	/* no terminal symbol (just termination of the list) */
 };
 
 
-// symbols
+/* symbols */
 typedef enum
 {
 	DOUBLE_QUOTE_SYM,
@@ -109,14 +109,14 @@ symbol;
 
 
 extern	int	initializeScanner(char *);
-extern	void	disposeScanner();
-extern	int	scanNextSymbol();
-extern	int	scanNextSymbolSkipNewline();
-extern	int	getCurrentSymbol();
-extern	char *	getCurrentIdentName();
-extern	uint32_64_t	getCurrentNumberValue();
-extern	int	getCurrentLine();
-extern	int	getCurrentColumn();
+extern	void	disposeScanner(void);
+extern	int	scanNextSymbol(void);
+extern	int	scanNextSymbolSkipNewline(void);
+extern	int	getCurrentSymbol(void);
+extern	char *	getCurrentIdentName(void);
+extern	uint32_64_t	getCurrentNumberValue(void);
+extern	int	getCurrentLine(void);
+extern	int	getCurrentColumn(void);
 
 #endif /* _SCANNER_H */
 

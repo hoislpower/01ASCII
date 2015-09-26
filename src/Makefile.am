@@ -47,5 +47,6 @@ __top_builddir__bin_01ascii_SOURCES += parser.h scanner.c scanner.h bit-array.c
 __top_builddir__bin_01ascii_SOURCES += bit-array.h bin-input.c hex-input.c 
 __top_builddir__bin_01ascii_SOURCES += hex-input.h input.h device-description.c 
 __top_builddir__bin_01ascii_SOURCES += device-data.h device-description.h
+__top_builddir__bin_01ascii_CFLAGS = -ansi
 
 

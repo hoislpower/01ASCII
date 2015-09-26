@@ -41,35 +41,34 @@
 
 
 
-// Datatype for device data
-// -----------------------------------------------------------------------------
-// The datatype contains all neccessary information about a device to
-// generate program data.
-// -----------------------------------------------------------------------------
+/* Datatype for device data                                                   */
+/*----------------------------------------------------------------------------*/
+/* The datatype contains all neccessary information about a device to         */
+/* generate program data.                                                     */
+/*----------------------------------------------------------------------------*/
 typedef struct
 {
 	char name[MAX_DEVICE_NAME_LENGTH];
 
-	// size of memory and blocks in bytes
+	/* size of memory and blocks in bytes */
 	uint32_64_t memorySize;
 	uint32_64_t blockSize;
 
-	// code start address
+	/* code start address */
 	uint32_64_t startAddress;
 
-	// the address is incremented by this value when accessing the next word
-	// (default is 1)
+	/* the address is incremented by this value when accessing the next */
+	/* word (default is 1) */
 	uint8_t addressStepPerWord;
 
-	// lengths of words and addresses in bits
+	/* lengths of words and addresses in bits */
 	uint8_t wordLength;
 	uint8_t addressLength;
 
-	// data and address bit orders ([2] -> program and verify)
+	/* data and address bit orders ([2] -> program and verify) */
 	int8_t wordBitOrder[2][MAX_BIT_ORDER_LENGTH];
 	int8_t wordAddressBitOrder[2][MAX_BIT_ORDER_LENGTH];
 	int8_t preDataBlockAddrBitOrder[2][MAX_BIT_ORDER_LENGTH];
 	int8_t postDataBlockAddrBitOrder[2][MAX_BIT_ORDER_LENGTH];
-}
-deviceData;
+} deviceData;
 

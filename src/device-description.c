@@ -44,19 +44,19 @@
 #include "device-description.h"
 
 
-// version of deviceData for checking compatibility with files
+/* version of deviceData for checking compatibility with files */
 const uint8_t deviceDataVersion = 0x01;
 
-// maximum length of address and data words in bytes
+/* maximum length of address and data words in bytes */
 const uint8_t maxWordLength = sizeof(uint32_64_t)*8;
 
 
-// Get the length of a BitOrder.
-// -----------------------------------------------------------------------------
-// This function searches for the first unused bit and returns its index + 1.
-// IN bitOrder: Array whose length to be returned.
-// RETURNS: Length of the bit order.
-// -----------------------------------------------------------------------------
+/* Get the length of a BitOrder.                                              */
+/*----------------------------------------------------------------------------*/
+/* This function searches for the first unused bit and returns its index + 1. */
+/* IN bitOrder: Array whose length to be returned.                            */
+/* RETURNS: Length of the bit order.                                          */
+/*----------------------------------------------------------------------------*/
 uint8_t	bitOrderLength(int8_t *bitOrder)
 {
 	uint8_t length;
@@ -70,12 +70,12 @@ uint8_t	bitOrderLength(int8_t *bitOrder)
 }
 
 
-// Check whether a BitOrder is completely empty or not.
-// -----------------------------------------------------------------------------
-// IN bitOrder: Array to check if it is empty.
-// RETURNS: true if the first element of the array are set to UNUSED_BIT, false 
-//          otherwise.
-// -----------------------------------------------------------------------------
+/* Check whether a BitOrder is completely empty or not.                       */
+/*----------------------------------------------------------------------------*/
+/* IN bitOrder: Array to check if it is empty.                                */
+/* RETURNS: true if the first element of the array are set to UNUSED_BIT,     */ 
+/*          false otherwise.                                                  */
+/*----------------------------------------------------------------------------*/
 int	bitOrderIsEmpty(int8_t *bitOrder)
 {
 	if(bitOrder[0] == UNUSED_BIT)
@@ -85,12 +85,12 @@ int	bitOrderIsEmpty(int8_t *bitOrder)
 }
 
 
-// Check whether two BitOrder arrays are equal or not.
-// -----------------------------------------------------------------------------
-// IN bitOrder1: Array to compare
-// IN bitOrder2: Array to compare
-// RETURNS: true if the bit orders are equal, false otherwise.
-// -----------------------------------------------------------------------------
+/* Check whether two BitOrder arrays are equal or not.                        */
+/*----------------------------------------------------------------------------*/
+/* IN bitOrder1: Array to compare                                             */
+/* IN bitOrder2: Array to compare                                             */
+/* RETURNS: true if the bit orders are equal, false otherwise.                */
+/*----------------------------------------------------------------------------*/
 int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 {
 	int i;
@@ -98,7 +98,7 @@ int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 
 	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
 	{
-		// compare bit by bit
+		/* compare bit by bit */
 		if(bitOrder1[i] != bitOrder2[i])
 		{
 			printf("Index: %i\t %i\t %i\r\n", i, bitOrder1[i], bitOrder2[i]);
@@ -110,20 +110,20 @@ int	bitOrdersAreEqual(int8_t *bitOrder1, int8_t *bitOrder2)
 }
 
 
-// Check if program and verify bit orders are equal
-// -----------------------------------------------------------------------------
-// Compare the PROGRAM and VERIFY bit orders.
-// IN device: Device data structure containing the bit orders to compare.
-// RETURNS: true if the bit orders are equal, false otherwise.
-// -----------------------------------------------------------------------------
+/* Check if program and verify bit orders are equal                           */
+/*----------------------------------------------------------------------------*/
+/* Compare the PROGRAM and VERIFY bit orders.                                 */
+/* IN device: Device data structure containing the bit orders to compare.     */
+/* RETURNS: true if the bit orders are equal, false otherwise.                */
+/*----------------------------------------------------------------------------*/
 int	programAndVerfiyBitOrdersAreEqual(deviceData *device)
 {
 	int bitOrdersAreEqual;
 	int i;
 
 
-	// loop till the end of the arrays is reached
-	// or till a difference is found
+	/* loop till the end of the arrays is reached */
+	/* or till a difference is found */
 	i=0;
 	bitOrdersAreEqual = true;
 	while((i < MAX_BIT_ORDER_LENGTH) && (bitOrdersAreEqual == true))
@@ -151,24 +151,24 @@ int	programAndVerfiyBitOrdersAreEqual(deviceData *device)
 }
 
 
-// Print a BitOrder array
-// -----------------------------------------------------------------------------
-// Print the content of the complete array.
-// IN bitOrder: Array to print
-// -----------------------------------------------------------------------------
+/* Print a BitOrder array                                                     */
+/*----------------------------------------------------------------------------*/
+/* Print the content of the complete array.                                   */
+/* IN bitOrder: Array to print                                                */
+/*----------------------------------------------------------------------------*/
 void	printBitOrder(int8_t bitOrder[])
 {
 	int i;
 
 
-	// start line with 3 spaces
+	/* start line with 3 spaces */
 	printf("   ");
 
-	// print all but one bits
+	/* print all but one bits */
 	i=0;
 	while((bitOrder[i+1] != UNUSED_BIT) && (i+1 < MAX_BIT_ORDER_LENGTH))
 	{
-		// print bit by bit separated by a comma and a space
+		/* print bit by bit separated by a comma and a space */
 		if(bitOrder[i] == LITERAL0_BIT)
 			printf("'0', ");
 		else if(bitOrder[i] == LITERAL1_BIT)
@@ -178,7 +178,7 @@ void	printBitOrder(int8_t bitOrder[])
 		i++;
 	}
 
-	// print the last bit
+	/* print the last bit */
 	if(bitOrder[i] != UNUSED_BIT)
 	{
 		if(bitOrder[i] == LITERAL0_BIT)
@@ -191,11 +191,11 @@ void	printBitOrder(int8_t bitOrder[])
 }
 
 
-// Display the content of the deviceData structure
-// -----------------------------------------------------------------------------
-// Print the content of each element in the deviceData structure.
-// IN deviceData: Data to be printed.
-// -----------------------------------------------------------------------------
+/* Display the content of the deviceData structure                            */
+/*----------------------------------------------------------------------------*/
+/* Print the content of each element in the deviceData structure.             */
+/* IN deviceData: Data to be printed.                                         */
+/*----------------------------------------------------------------------------*/
 void	printDeviceDescription(deviceData *device)
 {
 	printf("device: %s\r\n\r\n", device->name);
@@ -226,20 +226,20 @@ void	printDeviceDescription(deviceData *device)
 }
 
 
-// Initialize a deviceData structure.
-// -----------------------------------------------------------------------------
-// This procedure must be called once before using any deviceData structure.
-// IN device: deviceData structure to initialize
-// -----------------------------------------------------------------------------
+/* Initialize a deviceData structure.                                         */
+/*----------------------------------------------------------------------------*/
+/* This procedure must be called once before using any deviceData structure.  */
+/* IN device: deviceData structure to initialize                              */
+/*----------------------------------------------------------------------------*/
 void	initializeDeviceData(deviceData *device)
 {
 	int i;
 
 
-	// set all characters of the name array to '\0'
+	/* set all characters of the name array to '\0' */
 	strncpy(device->name, "", MAX_DEVICE_NAME_LENGTH);
 
-	// set other attributes to default values
+	/* set other attributes to default values */
 	device->memorySize = 0;
 	device->blockSize = 0;
 	device->startAddress = DEFAULT_START_ADDRESS;
@@ -247,7 +247,7 @@ void	initializeDeviceData(deviceData *device)
 	device->wordLength = DEFAULT_WORD_LENGTH;
 	device->addressLength = DEFAULT_ADDRESS_LENGTH;
 
-	// set all elements of the bit order arrays to -1
+	/* set all elements of the bit order arrays to -1 */
 	for(i=0; i<MAX_BIT_ORDER_LENGTH; i++)
 	{
 		device->wordBitOrder[PROGRAM][i] = UNUSED_BIT;
@@ -262,22 +262,22 @@ void	initializeDeviceData(deviceData *device)
 }
 
 
-// Save the deviceData to a file.
-// -----------------------------------------------------------------------------
-// Save the device description to a file.
-// The first two bytes of the file are the deviceDataVersion and the 
-// maxWordLength. The rest of the structure is written as a whole.
-// IN device: Device description to be written to a file.
-// IN fileName: Name of the file to be written.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Save the deviceData to a file.                                             */
+/*----------------------------------------------------------------------------*/
+/* Save the device description to a file.                                     */
+/* The first two bytes of the file are the deviceDataVersion and the          */
+/* maxWordLength. The rest of the structure is written as a whole.            */
+/* IN device: Device description to be written to a file.                     */
+/* IN fileName: Name of the file to be written.                               */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	saveDeviceDescription(deviceData *device, char *fileName)
 {
 	int writtenBytes;
 	FILE *file;
 
 
-	// create the file
+	/* create the file */
 	file = fopen(fileName, "wb+");
 	if(file == NULL)
 	{
@@ -286,7 +286,7 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// write the version of the deviceData structure
+	/* write the version of the deviceData structure */
 	if(fwrite(&deviceDataVersion, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
@@ -295,7 +295,7 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// write the maximum word length (32 or 64 bit)
+	/* write the maximum word length (32 or 64 bit) */
 	if(fwrite(&maxWordLength, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
@@ -304,7 +304,7 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// write the complete structure to the file
+	/* write the complete structure to the file */
 	writtenBytes = fwrite(device, sizeof(uint8_t), sizeof(deviceData),file);
 	fclose(file);
 
@@ -319,17 +319,18 @@ int	saveDeviceDescription(deviceData *device, char *fileName)
 }
 
 
-// Load the deviceData from a file.
-// -----------------------------------------------------------------------------
-// Load the deviceData structure with the content of a device description file.
-// The function tries to load the file no matter if it is a 32 or 64 bit file.
-// The function exits with a failure if the current structure is 32 bit, 
-// the file is 64 bit and the data of the file does not fit into a 32 bit 
-// structure.
-// OUT device: Device description read out from the file.
-// IN fileName: Name of the file to be read.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Load the deviceData from a file.                                           */
+/*----------------------------------------------------------------------------*/
+/* Load the deviceData structure with the content of a device description     */
+/* file.                                                                      */
+/* The function tries to load the file no matter if it is a 32 or 64 bit file.*/
+/* The function exits with a failure if the current structure is 32 bit,      */
+/* the file is 64 bit and the data of the file does not fit into a 32 bit     */
+/* structure.                                                                 */
+/* OUT device: Device description read out from the file.                     */
+/* IN fileName: Name of the file to be read.                                  */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	loadDeviceDescription(deviceData *device, char *fileName)
 {
 	uint8_t	fileMaxBitOrderLength;
@@ -342,10 +343,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	FILE *file;
 
 
-	// initialize the device data structure
+	/* initialize the device data structure */
 	initializeDeviceData(device);
 
-	// open the file
+	/* open the file */
 	file = fopen(fileName, "rb");
 	if(file == NULL)
 	{
@@ -354,7 +355,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// read the version of the file
+	/* read the version of the file */
 	if(fread(&fileVersion, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
@@ -363,7 +364,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// compare the version of the file with the current deviceData version
+	/* compare version of the file with the current deviceData version */
 	if(fileVersion != deviceDataVersion)
 	{
 		fclose(file);
@@ -372,7 +373,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// read the maximum word length (32 or 64 bit)
+	/* read the maximum word length (32 or 64 bit) */
 	if(fread(&fileWordLength, sizeof(uint8_t), 1, file) != 1)
 	{
 		fclose(file);
@@ -381,7 +382,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// check for a valid maximum word length
+	/* check for a valid maximum word length */
 	if(fileWordLength != MAX_WORD_LENGTH32 && 
 	   fileWordLength != MAX_WORD_LENGTH64)
 	{
@@ -393,10 +394,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 
 
-	// read the complete structure from the file
+	/* read the complete structure from the file */
 	if(fileWordLength == MAX_WORD_LENGTH32)
 	{
-		// read a 32 bit file
+		/* read a 32 bit file */
 		readBytes = fread(readBuffer, sizeof(uint8_t), 
 						sizeof(deviceData32), file);
 		if(readBytes != sizeof(deviceData32))
@@ -412,7 +413,7 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	else
 	{
-		// read a 64 bit file
+		/* read a 64 bit file */
 		readBytes = fread(readBuffer, sizeof(uint8_t), 
 						sizeof(deviceData64), file);
 		if(readBytes != sizeof(deviceData64))
@@ -427,19 +428,19 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		fileMaxBitOrderLength = MAX_BIT_ORDER_LENGTH64;
 	}
 
-	// Filename
+	/* Filename */
 	strncpy(device->name, (char *) readBuffer, MAX_DEVICE_NAME_LENGTH);
 	readPointer = readBuffer + MAX_DEVICE_NAME_LENGTH;
 
-	// memorySize
+	/* memorySize */
 	device->memorySize = *((uint32_t *) readPointer);
 	readPointer = readPointer + sizeof(uint32_t);
 	if(fileWordLength == MAX_WORD_LENGTH64)
 	{
-		// read the upper 32 bit
+		/* read the upper 32 bit */
 		upper4Bytes = *((uint32_t *) readPointer);
 
-		// Check if the upper 4 bytes are 0
+		/* Check if the upper 4 bytes are 0 */
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
@@ -456,15 +457,15 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		}
 	}
 
-	// blockSize
+	/* blockSize */
 	device->blockSize = *((uint32_t *) readPointer);
 	readPointer = readPointer + sizeof(uint32_t);
 	if(fileWordLength == MAX_WORD_LENGTH64)
 	{
-		// read the upper 32 bit
+		/* read the upper 32 bit */
 		upper4Bytes = *((uint32_t *) readPointer);
 
-		// Check if the upper 4 bytes are 0
+		/* Check if the upper 4 bytes are 0 */
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
@@ -481,15 +482,15 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		}
 	}
 
-	// startAddress
+	/* startAddress */
 	device->startAddress = *((uint32_t *) readPointer);
 	readPointer = readPointer + sizeof(uint32_t);
 	if(fileWordLength == MAX_WORD_LENGTH64)
 	{
-		// read the upper 32 bit
+		/* read the upper 32 bit */
 		upper4Bytes = *((uint32_t *) readPointer);
 
-		// Check if the upper 4 bytes are 0
+		/* Check if the upper 4 bytes are 0 */
 		if(maxWordLength == MAX_WORD_LENGTH32 && upper4Bytes != 0)
 		{
 			fclose(file);
@@ -506,22 +507,22 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 		}
 	}
 
-	// addressStepPerWord
+	/* addressStepPerWord */
 	device->addressStepPerWord = (uint8_t) *readPointer;
 	readPointer = readPointer + sizeof(uint8_t);
 
-	// wordLength
+	/* wordLength */
 	device->wordLength = (uint8_t) *readPointer;
 	readPointer = readPointer + sizeof(uint8_t);
 
-	// addressLength
+	/* addressLength */
 	device->addressLength = (uint8_t) *readPointer;
 	readPointer = readPointer + sizeof(uint8_t);
 
-	// wordBitOrder PROGRAM
+	/* wordBitOrder PROGRAM */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -542,10 +543,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// wordBitOrder VERIFY
+	/* wordBitOrder VERIFY */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -566,10 +567,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// wordAddressBitOrder PROGRAM
+	/* wordAddressBitOrder PROGRAM */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -590,10 +591,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// wordAddressBitOrder VERIFY
+	/* wordAddressBitOrder VERIFY */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -614,10 +615,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// blockAddressBeforeDataBitOrder PROGRAM
+	/* blockAddressBeforeDataBitOrder PROGRAM */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -638,10 +639,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// blockAddressBeforeDataBitOrder VERIFY
+	/* blockAddressBeforeDataBitOrder VERIFY */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -662,10 +663,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// blockAddressAfterDataBitOrder PROGRAM
+	/* blockAddressAfterDataBitOrder PROGRAM */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "
@@ -686,10 +687,10 @@ int	loadDeviceDescription(deviceData *device, char *fileName)
 	}
 	readPointer = readPointer + fileMaxBitOrderLength;
 
-	// blockAddressBeforeDataBitOrder VERIFY
+	/* blockAddressBeforeDataBitOrder VERIFY */
 	if(fileWordLength > maxWordLength)
 	{
-		if(bitOrderLength(readPointer) > MAX_BIT_ORDER_LENGTH)
+		if(bitOrderLength((int8_t *)readPointer) > MAX_BIT_ORDER_LENGTH)
 		{
 			fclose(file);
 			fprintf(stdout, "Can not use 64 bit device file \"%s\" "

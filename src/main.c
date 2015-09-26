@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	uint8_t *programData;
 
 
-	// check for minimal number of arguments
+	/* check for minimal number of arguments */
 	if(argc < COMMAND_POSITION+1)
 	{
 		fprintf(stderr, "ERROR: Wrong number of arguments!\r\n");
@@ -97,13 +97,13 @@ int main(int argc, char *argv[])
 	strcpy(inputFileName, "");
 	strcpy(outputFileName, "");
 
-	// compile source file
+	/* compile source file */
 	if(strcmp(argv[COMMAND_POSITION], COMPILE_COMMAND) == 0)
 	{
 		commandFound = true;
 		nextArgument++;
 
-		// check the number of arguments for this command
+		/* check the number of arguments for this command */
 		if(argc < COMPILE_MIN_ARGUMENT_NUM)
 		{
 			fprintf(stderr, "ERROR: Wrong number of arguments!"
@@ -112,16 +112,16 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// process command line arguments
+		/* process command line arguments */
 		while(nextArgument < argc)
 		{
-			// input file name
+			/* input file name */
 			if(strcmp(inputFileName, "") == 0)
 				strcpy(inputFileName, argv[nextArgument]);
-			// output file name
+			/* output file name */
 			else if(strcmp(outputFileName, "") == 0)
 				strcpy(outputFileName, argv[nextArgument]);
-			// unknown argument
+			/* unknown argument */
 			else
 			{
 				fprintf(stderr, "ERROR: Unknown argument \"%s\""
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 			nextArgument++;
 		}
 
-		// check if input file name has been set
+		/* check if input file name has been set */
 		if(strcmp(inputFileName, "") == 0)
 		{
 			fprintf(stderr, "ERROR: Missing INPUTFILE!\r\n");
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// check if output file name has been set
+		/* check if output file name has been set */
 		if(strcmp(outputFileName, "") == 0)
 		{
 			fprintf(stderr, "ERROR: Missing OUTPUTFILE!\r\n");
@@ -149,19 +149,19 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// compile source file
+		/* compile source file */
 		if(compileSourceFile(inputFileName, outputFileName) != 
 								EXIT_SUCCESS)
 			return EXIT_FAILURE;
 	}
 
-	// generate data and address files
+	/* generate data and address files */
 	if(strcmp(argv[COMMAND_POSITION], GENERATE_COMMAND) == 0)
 	{
 		commandFound = true;
 		nextArgument++;
 
-		// check the number of arguments for this command
+		/* check the number of arguments for this command */
 		if(argc < GENERATE_MIN_ARGUMENT_NUM)
 		{
 			fprintf(stderr, "ERROR: Wrong number of arguments!"
@@ -170,35 +170,35 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// option default values
+		/* option default values */
 		ascii = true;
 		hexInput = false;
 		generateAllBlocks = false;
 
-		// process command line arguments
+		/* process command line arguments */
 		while(nextArgument < argc)
 		{
-			// generate all blocks option
+			/* generate all blocks option */
 			if(strcmp(argv[nextArgument], GENERATE_ALL_OPTION) == 0)
 				generateAllBlocks = true;
-			// generate binary data option
+			/* generate binary data option */
 			else if(strcmp(argv[nextArgument],
 						GENERATE_BINARY_OPTION) == 0)
 				ascii = false;
-			// hex file input option
+			/* hex file input option */
 			else if(strcmp(argv[nextArgument],
 						GENERATE_HEX_INPUT_OPTION) == 0)
 				hexInput = true;
-			// device file name
+			/* device file name */
 			else if(strcmp(deviceFileName, "") == 0)
 				strcpy(deviceFileName, argv[nextArgument]);
-			// input file name
+			/* input file name */
 			else if(strcmp(inputFileName, "") == 0)
 				strcpy(inputFileName, argv[nextArgument]);
-			// output file name
+			/* output file name */
 			else if(strcmp(outputFileName, "") == 0)
 				strcpy(outputFileName, argv[nextArgument]);
-			// unknown argument
+			/* unknown argument */
 			else
 			{
 				fprintf(stderr, "ERROR: Unknown argument \"%s\""
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 			nextArgument++;
 		}
 
-		// check if device file name has been set
+		/* check if device file name has been set */
 		if(strcmp(deviceFileName, "") == 0)
 		{
 			fprintf(stderr, "ERROR: Missing DEVICEFILE!\r\n");
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// check if input file name has been set
+		/* check if input file name has been set */
 		if(strcmp(inputFileName, "") == 0)
 		{
 			fprintf(stderr, "ERROR: Missing INPUTFILE!\r\n");
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// check if output file name has been set
+		/* check if output file name has been set */
 		if(strcmp(outputFileName, "") == 0)
 		{
 			fprintf(stderr, "ERROR: Missing OUTPUTFILE!\r\n");
@@ -234,11 +234,11 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// load device data
+		/* load device data */
 		if(loadDeviceDescription(&device, deviceFileName)!=EXIT_SUCCESS)
 			return EXIT_FAILURE;
 
-		// allocate memory for the input data
+		/* allocate memory for the input data */
 		if((programData = malloc(device.memorySize)) == NULL)
 		{
 			fprintf(stderr, "ERROR: Could not allocate %lu bytes "
@@ -246,13 +246,13 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 
-		// initialize memory with 0xFF
+		/* initialize memory with 0xFF */
 		memset(programData, 0xFF, device.memorySize);
 
-		// read input file
+		/* read input file */
 		if(hexInput == true)
 		{
-			// read input file as intel hex file
+			/* read input file as intel hex file */
 			if(readHexFile(inputFileName, &device, programData)
 								!= EXIT_SUCCESS)
 			{
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			// read input file as binary file
+			/* read input file as binary file */
 			if(readBinFile(inputFileName, &device, programData)
 								!= EXIT_SUCCESS)
 			{
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 		}
 
 
-		// write output files
+		/* write output files */
 		if(generateOutputFiles(outputFileName, &device, programData,
 				ascii, generateAllBlocks) != EXIT_SUCCESS)
 		{
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 		free(programData);
 	}
 
-	// check if one of the commands was executed
+	/* check if one of the commands was executed */
 	if(commandFound == false)
 	{
 		fprintf(stderr, "ERROR: Command \"%s\" not found!\r\n",

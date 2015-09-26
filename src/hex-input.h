@@ -66,7 +66,7 @@
 #define MAX_LINE_LENGTH		(MAX_LINE_DATA_LENGTH+LINE_HEADER_LENGTH+1)*2
 
 
-// datatype for storing information of one hex file line
+/* datatype for storing information of one hex file line */
 typedef struct
 {
 	uint8_t	byteCount;

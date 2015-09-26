@@ -44,25 +44,26 @@
 #include "input.h"
 
 
-// Reads a complete bin file and store it into an array
-// -----------------------------------------------------------------------------
-// The content of the file is copied to programData as a whole.
-// programData must be a byte array with at least device->memorySize bytes size.
-// IN fileName: Name of the file to be read.
-// IN device: Description of the device whose data should be read.
-// OUT programData: Byte array that contains the read data.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Reads a complete bin file and store it into an array                       */
+/*----------------------------------------------------------------------------*/
+/* The content of the file is copied to programData as a whole.               */
+/* programData must be a byte array with at least device->memorySize bytes    */
+/* size.                                                                      */
+/* IN fileName: Name of the file to be read.                                  */
+/* IN device: Description of the device whose data should be read.            */
+/* OUT programData: Byte array that contains the read data.                   */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	readBinFile(char *fileName, deviceData *device, uint8_t *programData)
 {
 	uint32_64_t readBytes;
 	FILE *file;
 
 
-	// initialize memory with 0xFF
+	/* initialize memory with 0xFF */
 	memset(programData, 0xFF, device->memorySize);
 
-	// open input file
+	/* open input file */
 	file = fopen(fileName, "rb");
 	if(file == NULL)
 	{
@@ -71,15 +72,15 @@ int	readBinFile(char *fileName, deviceData *device, uint8_t *programData)
 		return EXIT_FAILURE;
 	}
 
-	// read in the complete device memory
+	/* read in the complete device memory */
 	readBytes = fread(programData, sizeof(*programData), 
 						device->memorySize, file);
 
 	fclose(file);
 
-	// readBytes will be less than device->memorySize when the binary
-	// file doesn't fill the complete memory of the device (almost always)
-	// check if at least 1 byte could be read 
+	/* readBytes will be less than device->memorySize when the binary */
+	/* file doesn't fill the complete memory of the device (almost always)*/
+	/* check if at least 1 byte could be read */
 	if(readBytes < 1)
 	{
 		fprintf(stderr, "ERROR: Could not read from file \"%s\"!\r\n", 

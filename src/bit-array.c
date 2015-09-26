@@ -44,18 +44,18 @@
 #include "bit-array.h"
 
 
-// global Variables
+/* global Variables */
 static	int8_t *array = NULL;
 static	int arrayIndex;
 static	int arrayLength;
 
 
-// Initializes the bit array
-// This procedure must be called once before using the other procedures.
-// -----------------------------------------------------------------------------
-// IN length: Length of the new bit array.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Initializes the bit array                                                  */
+/* This procedure must be called once before using the other procedures.      */
+/*----------------------------------------------------------------------------*/
+/* IN length: Length of the new bit array.                                    */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	initializeBitArray(int length)
 {
 	int i;
@@ -64,8 +64,8 @@ int	initializeBitArray(int length)
 	arrayLength = length;
 	arrayIndex = 0;
 
-	// allocate memory for the array and an additional buffer for 
-	// temporarily storing parts of the bit array
+	/* allocate memory for the array and an additional buffer for */
+	/* temporarily storing parts of the bit array */
 	array = malloc(arrayLength*sizeof(int8_t));
 	if(array == NULL)
 	{
@@ -74,7 +74,7 @@ int	initializeBitArray(int length)
 		return EXIT_FAILURE;
 	}
 
-	// initialize the array with unused bits
+	/* initialize the array with unused bits */
 	for(i=0; i<arrayLength; i++)
 		array[i] = UNUSED_BIT;
 
@@ -82,10 +82,10 @@ int	initializeBitArray(int length)
 }
 
 
-// Disposes the bit array
-// This procedure must be called once when the bit array is no longer used.
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+/* Disposes the bit array                                                     */
+/* This procedure must be called once when the bit array is no longer used.   */
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 void	disposeBitArray()
 {
 	if(array != NULL)
@@ -93,36 +93,36 @@ void	disposeBitArray()
 }
 
 
-// Get the bit array
-// The returned bit array must not be written.
-// -----------------------------------------------------------------------------
-// RETURNS: The bit array.
-// -----------------------------------------------------------------------------
+/* Get the bit array                                                          */
+/* The returned bit array must not be written.                                */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: The bit array.                                                    */
+/*----------------------------------------------------------------------------*/
 int8_t*	getBitArray()
 {
 	return array;
 }
 
 
-// Get the current index.
-// -----------------------------------------------------------------------------
-// RETURNS: Current index within the bit array.
-// -----------------------------------------------------------------------------
+/* Get the current index.                                                     */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Current index within the bit array.                               */
+/*----------------------------------------------------------------------------*/
 int	bitArrayGetCurrentIndex()
 {
 	return arrayIndex;
 }
 
 
-// Appends a bit range to the bit array
-// e.g.: When startBit=3 and endBit=5 then 3,4,5 is added to the array.
-// -----------------------------------------------------------------------------
-// IN startBit: Start bit of the range.
-// IN endBit: End bit of the range.
-// RETURNS: EXIT_FAILURE if the result exceeded the length of the array,
-//          EXIT_SUCCESS otherwise.
-//          If EXIT_FAILURE is returned the bit array will be left unchanged.
-// -----------------------------------------------------------------------------
+/* Appends a bit range to the bit array                                       */
+/* e.g.: When startBit=3 and endBit=5 then 3,4,5 is added to the array.       */
+/*----------------------------------------------------------------------------*/
+/* IN startBit: Start bit of the range.                                       */
+/* IN endBit: End bit of the range.                                           */
+/* RETURNS: EXIT_FAILURE if the result exceeded the length of the array,      */
+/*          EXIT_SUCCESS otherwise.                                           */
+/*          If EXIT_FAILURE is returned the bit array will be left unchanged. */
+/*----------------------------------------------------------------------------*/
 int	bitArrayAdd(int8_t startBit, int8_t endBit)
 {
 	int i;
@@ -130,11 +130,11 @@ int	bitArrayAdd(int8_t startBit, int8_t endBit)
 
 	if(endBit >= startBit)
 	{
-		// check if the length of the array will be exceeded
+		/* check if the length of the array will be exceeded */
 		if(arrayIndex + endBit-startBit+1 > arrayLength)
 			return EXIT_FAILURE;
 
-		// add the bits to the array
+		/* add the bits to the array */
 		for(i=startBit; i<=endBit; i++)
 		{
 			array[arrayIndex] = i;
@@ -143,11 +143,11 @@ int	bitArrayAdd(int8_t startBit, int8_t endBit)
 	}
 	else
 	{
-		// check if the length of the array will be exceeded
+		/* check if the length of the array will be exceeded */
 		if(arrayIndex + startBit-endBit+1 > arrayLength)
 			return EXIT_FAILURE;
 
-		// add the bits to the array
+		/* add the bits to the array */
 		for(i=startBit; i>=endBit; i--)
 		{
 			array[arrayIndex] = i;
@@ -159,40 +159,40 @@ int	bitArrayAdd(int8_t startBit, int8_t endBit)
 }
 
 
-// Repeat parts of the array.
-// -----------------------------------------------------------------------------
-// IN startIndex: Start index of the array part to repeat.
-//                (The repeat includes the element at this index.)
-// IN endIndex: End index of the array part to repeat.
-//              (The repeat includes the element at this index.)
-// IN repeatNum: Number of repeats.
-// RETURNS: EXIT_FAILURE if the result exceeded the length of the array,
-//          EXIT_SUCCESS otherwise.
-//          If EXIT_FAILURE is returned the bit array will be left unchanged.
-// -----------------------------------------------------------------------------
+/* Repeat parts of the array.                                                 */
+/*----------------------------------------------------------------------------*/
+/* IN startIndex: Start index of the array part to repeat.                    */
+/*                (The repeat includes the element at this index.)            */
+/* IN endIndex: End index of the array part to repeat.                        */
+/*              (The repeat includes the element at this index.)              */
+/* IN repeatNum: Number of repeats.                                           */
+/* RETURNS: EXIT_FAILURE if the result exceeded the length of the array,      */
+/*          EXIT_SUCCESS otherwise.                                           */
+/*          If EXIT_FAILURE is returned the bit array will be left unchanged. */
+/*----------------------------------------------------------------------------*/
 int	bitArrayRepeat(int startIndex, int endIndex, int repeatNum)
 {
 	int i;
 	int sequenceLength;
 
 
-	// calculate the length of the sequence
+	/* calculate the length of the sequence */
 	sequenceLength = endIndex - startIndex + 1;
 
-	// exit if there is nothing to repeat (return no failure)
+	/* exit if there is nothing to repeat (return no failure) */
 	if(sequenceLength < 1)
 		return EXIT_SUCCESS;
 
-	// check if the length of the array will be exceeded
+	/* check if the length of the array will be exceeded */
 	if(arrayIndex + sequenceLength*repeatNum > arrayLength)
 		return EXIT_FAILURE;
 
-	// shift the part which follows the repeat section
-	// to the end of the array
+	/* shift the part which follows the repeat section */
+	/* to the end of the array */
 	memcpy(array+endIndex+1+sequenceLength*repeatNum, array+endIndex+1, 
 		arrayIndex-endIndex-1);
 
-	// repeat the given bit sequence
+	/* repeat the given bit sequence */
 	for(i=0; i<repeatNum; i++)
 	{
 		memcpy(array+endIndex+1+i*sequenceLength, array+startIndex,

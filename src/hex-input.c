@@ -45,14 +45,14 @@
 #include "hex-input.h"
 
 
-// Calculate the checksum of the line
-// -----------------------------------------------------------------------------
-// First the sum of all bytes (checksum is skipped) of the line is calculated. 
-// Then the two's complement of the result is returned.
-// IN hexFileLine: Data structure containing the information of the line to
-//                 calculate the checksum for.
-// RETURNS: The checksum of the given line.
-// -----------------------------------------------------------------------------
+/* Calculate the checksum of the line                                         */
+/*----------------------------------------------------------------------------*/
+/* First the sum of all bytes (checksum is skipped) of the line is calculated.*/
+/* Then the two's complement of the result is returned.                       */
+/* IN hexFileLine: Data structure containing the information of the line to   */
+/*                 calculate the checksum for.                                */
+/* RETURNS: The checksum of the given line.                                   */
+/*----------------------------------------------------------------------------*/
 uint8_t	calculateChecksum(hexFileLine line)
 {
 	int byte;
@@ -67,32 +67,32 @@ uint8_t	calculateChecksum(hexFileLine line)
 	for(byte=0; byte<line.byteCount; byte++)
 		checksum = checksum + line.data[byte];
 
-	// The function always returns an int value even if the return value of
-	// the function is decalred as an uint8_t.
-	// This might cause problems when parsing the result of the function to
-	// an integer value because the upper bits might be set.
-	// So the value is first passed to an integer before returned.
+	/* The function always returns an int value even if the return value */
+	/* of the function is decalred as an uint8_t. */
+	/* This might cause problems when parsing the result of the function */
+	/* to an integer value because the upper bits might be set. */
+	/* So the value is first passed to an integer before returned. */
 	returnValue = (checksum ^ 0xFF) + 1;
 	return returnValue & 0xFF;
 }
 
 
-// Save the hex line to the program data
-// -----------------------------------------------------------------------------
-// Save the data of the hex file line to programData at the appropriate
-// address.
-// IN line: Line to be saved.
-// IN device: Description of the device whose data to be stored.
-// OUT programData: Program data where to store the line.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Save the hex line to the program data                                      */
+/*----------------------------------------------------------------------------*/
+/* Save the data of the hex file line to programData at the appropriate       */
+/* address.                                                                   */
+/* IN line: Line to be saved.                                                 */
+/* IN device: Description of the device whose data to be stored.              */
+/* OUT programData: Program data where to store the line.                     */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	saveHexLineToProgramData(hexFileLine line, deviceData *device,
 							uint8_t *programData)
 {
 	int	byte;
 
 
-	// check if the addresses are within the address boundaries
+	/* check if the addresses are within the address boundaries */
 	if(device->startAddress > line.extendedAddress + line.address)
 		return EXIT_FAILURE;
 
@@ -100,7 +100,7 @@ int	saveHexLineToProgramData(hexFileLine line, deviceData *device,
 				>= (device->startAddress + device->memorySize))
 		return EXIT_FAILURE;
 
-	// copy bytes to programData
+	/* copy bytes to programData */
 	for(byte=0; byte < line.byteCount; byte++)
 		programData[line.extendedAddress + line.address + byte - 
 					device->startAddress] = line.data[byte];
@@ -109,18 +109,19 @@ int	saveHexLineToProgramData(hexFileLine line, deviceData *device,
 }
 
 
-// Convert hex data into decimal data
-// -----------------------------------------------------------------------------
-// Converts the hexadecimal data in hexBuffer into decimal data by combining 
-// always two hex digits to one decimal digit. The result is stored in 
-// decBuffer.
-// The function returns a failure if one of the digits is no hexadecimal digit.
-// IN hexBuffer: Array of hexadecimal data to convert.
-// OUT decBuffer: Array where the decimal data is stored. The array must be at
-//                least half as long as the hexBuffer array.
-// IN hexBufferLength: Length of hexBuffer in hex digits.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Convert hex data into decimal data                                         */
+/*----------------------------------------------------------------------------*/
+/* Converts the hexadecimal data in hexBuffer into decimal data by combining  */
+/* always two hex digits to one decimal digit. The result is stored in        */
+/* decBuffer.                                                                 */
+/* The function returns a failure if one of the digits is no hexadecimal      */
+/* digit.                                                                     */
+/* IN hexBuffer: Array of hexadecimal data to convert.                        */
+/* OUT decBuffer: Array where the decimal data is stored. The array must be   */
+/*                at least half as long as the hexBuffer array.               */
+/* IN hexBufferLength: Length of hexBuffer in hex digits.                     */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	convertHexToDecBuffer(uint8_t *hexBuffer, uint8_t *decBuffer, 
 							uint8_t hexBufferLength)
 {
@@ -130,18 +131,18 @@ int	convertHexToDecBuffer(uint8_t *hexBuffer, uint8_t *decBuffer,
 
 	for(digit=0; digit<hexBufferLength; digit++)
 	{
-		// check for invalid characters
+		/* check for invalid characters */
 		if(isxdigit(hexBuffer[digit]) == 0)
 			return EXIT_FAILURE;
 
-		// distinguish between digits and letters
+		/* distinguish between digits and letters */
 		hexBuffer[digit] = toupper(hexBuffer[digit]);
 		if(isdigit(hexBuffer[digit]) != 0)
 			offset = '0';
 		else
 			offset = 'A' - 10;
 
-		// convert digit
+		/* convert digit */
 		if(digit % 2)
 			decBuffer[digit/2] += (hexBuffer[digit] - offset);
 		else
@@ -152,17 +153,17 @@ int	convertHexToDecBuffer(uint8_t *hexBuffer, uint8_t *decBuffer,
 }
 
 
-// Read a complete hex file and stores it into an array
-// -----------------------------------------------------------------------------
-// The function converts the data of the hex file into binary data and stores 
-// it in programData. programData must be a byte array with at least of
-// device->memorySize bytes size.
-// A failure is returned if the hex is inconsistent or can not be read.
-// IN fileName: Name of the hex file to be read.
-// IN device: Description of the device whose data to be stored.
-// OUT programData: Byte array that contains the read data.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Read a complete hex file and stores it into an array                       */
+/*----------------------------------------------------------------------------*/
+/* The function converts the data of the hex file into binary data and stores */ 
+/* it in programData. programData must be a byte array with at least of       */
+/* device->memorySize bytes size.                                             */
+/* A failure is returned if the hex is inconsistent or can not be read.       */
+/* IN fileName: Name of the hex file to be read.                              */
+/* IN device: Description of the device whose data to be stored.              */
+/* OUT programData: Byte array that contains the read data.                   */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 {
 	int endOfFile;
@@ -173,7 +174,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 	hexFileLine line;
 
 
-	// open input file
+	/* open input file */
 	file = fopen(fileName, "rb");
 	if(file == NULL)
 	{
@@ -190,7 +191,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 	{
 		lineNumber++;
 
-		// read line
+		/* read line */
 		hexBuffer[0] = '\r';
 		while(hexBuffer[0] == '\r' || hexBuffer[0] == '\n')
 		{
@@ -205,7 +206,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			}
 		}
 
-		// check for start code
+		/* check for start code */
 		if(hexBuffer[0] != START_CODE)
 		{
 			fclose(file);
@@ -215,7 +216,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			return EXIT_FAILURE;
 		}
 
-		// convert data to decimal numbers
+		/* convert data to decimal numbers */
 		if(convertHexToDecBuffer(hexBuffer+1, decBuffer, 
 					LINE_HEADER_LENGTH-1) != EXIT_SUCCESS)
 		{
@@ -226,13 +227,13 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			return EXIT_FAILURE;
 		}
 
-		// save header data
+		/* save header data */
 		line.byteCount = decBuffer[BYTE_COUNT_POS];
 		line.recordType = decBuffer[RECORD_TYPE_POS];
 		line.address = decBuffer[ADDRESS_POS+1] + 
 						(decBuffer[ADDRESS_POS] << 8);
 
-		// convert data to decimal numbers
+		/* convert data to decimal numbers */
 		if(convertHexToDecBuffer(hexBuffer + LINE_HEADER_LENGTH,
 			decBuffer, (line.byteCount+1)*2) != EXIT_SUCCESS)
 		{
@@ -243,11 +244,11 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			return EXIT_FAILURE;
 		}
 
-		// save data and checksum
+		/* save data and checksum */
 		memcpy(line.data, decBuffer, line.byteCount);
 		line.checksum = decBuffer[line.byteCount];
 
-		// check for correct checksum
+		/* check for correct checksum */
 		if(line.checksum != calculateChecksum(line))
 		{
 			fclose(file);
@@ -257,11 +258,11 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			return EXIT_FAILURE;
 		}
 
-		// check record type and process data
+		/* check record type and process data */
 		switch(line.recordType)
 		{
 			case DATA_RECORD:
-			// save data to device structure
+			/* save data to device structure */
 			if(saveHexLineToProgramData(line, device, programData) 
 								!= EXIT_SUCCESS)
 			{
@@ -276,7 +277,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			break;
 
 			case END_OF_FILE_RECORD:
-			// byte count must be 0x00 and address must be 0x0000
+			/* byte count must be 0x00 and address must be 0x0000 */
 			if(line.byteCount != 0 || line.address != 0)
 			{
 				fclose(file);
@@ -287,12 +288,12 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 				return EXIT_FAILURE;
 			}
 
-			// last record -> exit loop
+			/* last record -> exit loop */
 			endOfFile = true;
 			break;
 
 			case EXTENDED_SEGMENT_ADDRESS_RECORD:
-			// byte count must be 0x02 and address must be 0x0000
+			/* byte count must be 0x02 and address must be 0x0000 */
 			if(line.byteCount != 2 || line.address != 0)
 			{
 				fclose(file);
@@ -304,13 +305,13 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 				return EXIT_FAILURE;
 			}
 
-			// set the bits 4-19 of the address
+			/* set the bits 4-19 of the address */
 			line.extendedAddress = (line.data[0] << 12) + 
 							(line.data[1] << 4);
 			break;
 
 			case START_SEGMENT_ADDRESS_RECORD:
-			// byte count must be 0x04 and address must be 0x0000
+			/* byte count must be 0x04 and address must be 0x0000 */
 			if(line.byteCount != 4 || line.address != 0)
 			{
 				fclose(file);
@@ -322,8 +323,8 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 				return EXIT_FAILURE;
 			}
 
-			// ignore start segment address record
-			// (not needed for programming flash)
+			/* ignore start segment address record */
+			/* (not needed for programming flash) */
 			fprintf(stdout, "Found \"start segment address\" "
 				"record in hex file!\r\n       The record is "
 				"not needed for flash programming and "
@@ -331,7 +332,7 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 			break;
 
 			case EXTENDED_LINEAR_ADDRESS_RECORD:
-			// byte count must be 0x02 and address must be 0x0000
+			/* byte count must be 0x02 and address must be 0x0000 */
 			if(line.byteCount != 2 || line.address != 0)
 			{
 				fclose(file);
@@ -342,13 +343,13 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 				return EXIT_FAILURE;
 			}
 
-			// set the two MSBytes of the address
+			/* set the two MSBytes of the address */
 			line.extendedAddress = (line.data[0] << 24) + 
 							(line.data[1] << 16);
 			break;
 
 			case START_LINEAR_ADDRESS_RECORD:
-			// byte count must be 0x04 and address must be 0x0000
+			/* byte count must be 0x04 and address must be 0x0000 */
 			if(line.byteCount != 4 || line.address != 0)
 			{
 				fclose(file);
@@ -359,8 +360,8 @@ int	readHexFile(char *fileName, deviceData *device, uint8_t *programData)
 				return EXIT_FAILURE;
 			}
 
-			// ignore start linear address record 
-			// (not needed for programming flash)
+			/* ignore start linear address record */
+			/* (not needed for programming flash) */
 			fprintf(stdout, "Found \"start linear address\" "
 				"record in hex file!\r\n       The record is "
 				"not needed for flash programming and "

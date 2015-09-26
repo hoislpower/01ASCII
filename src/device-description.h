@@ -53,31 +53,31 @@
 #include <ctype.h>
 
 
-// define maximum devicename length
+/* define maximum devicename length */
 #define MAX_DEVICE_NAME_LENGTH	1024
 
 
-// Symbols for bit order arrays
+/* Symbols for bit order arrays */
 #define UNUSED_BIT	-1
 #define LITERAL0_BIT	-2
 #define LITERAL1_BIT	-3
 
 
-// define maximum lengths of words and bit orders
-#define MAX_WORD_LENGTH32	(8*sizeof(uint32_t))
-#define MAX_WORD_LENGTH64	(8*sizeof(uint64_t))
+/* define maximum lengths of words and bit orders */
+#define MAX_WORD_LENGTH32	((signed int)(8*sizeof(uint32_t)))
+#define MAX_WORD_LENGTH64	((signed int)(8*sizeof(uint64_t)))
 #define MAX_BIT_ORDER_LENGTH32	MAX_WORD_LENGTH32
 #define MAX_BIT_ORDER_LENGTH64	MAX_WORD_LENGTH64
 
 
-// define default values for device data attributes
+/* define default values for device data attributes */
 #define DEFAULT_START_ADDRESS		0
 #define DEFAULT_ADDRESS_STEP_PER_WORD	1
 #define DEFAULT_WORD_LENGTH		8
 #define DEFAULT_ADDRESS_LENGTH		8
 
 
-// declare 2 deviceData structures for 32 and 64 bit
+/* declare 2 deviceData structures for 32 and 64 bit */
 #define uint32_64_t uint32_t
 #define deviceData deviceData32
 #define MAX_BIT_ORDER_LENGTH	MAX_BIT_ORDER_LENGTH32
@@ -94,7 +94,7 @@
 #undef deviceData
 #undef MAX_BIT_ORDER_LENGTH
 
-// define datatype for 32 or 64 bit depending on the definition of USING_64BIT
+/* define datatype for 32 or 64 bit depending on the definition of USING_64BIT*/
 #if(USING_64BIT==1)
 	#define uint32_64_t	uint64_t
 	#define deviceData	deviceData64
@@ -109,7 +109,7 @@
 enum {PROGRAM, VERIFY, PROGRAM_VERIFY};
 
 
-// version of deviceData for checking compatibility with files
+/* version of deviceData for checking compatibility with files */
 extern const uint8_t deviceDataVersion;
 extern const uint8_t maxWordLength;
 

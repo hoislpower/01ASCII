@@ -41,18 +41,24 @@
 
 
 
-// -----------------------------------------------------------------------------
-// Terminal classes: -ident     ...Consists of one or more letters.
-//                   -hexnumber ...Consists of a leading zero, followed by 'x'
-//                                 or 'X', followed by one or more hexadecimal
-//                                 digits (0-9, A-F).
-//                   -decnumber ...Consists of one or more decimal digits (0-9).
-// -----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/
+/* Terminal classes: -ident     ...Consists of one or more letters.           */
+/*                   -hexnumber ...Consists of a leading zero, followed by 'x'*/
+/*                                 or 'X', followed by one or more hexadecimal*/
+/*                                 digits (0-9, A-F).                         */
+/*                   -decnumber ...Consists of one or more decimal digits.    */
+/*----------------------------------------------------------------------------*/
 
 #include "scanner.h"
 
 
-// global variables for saving information about the current state of the scaner
+/* redefine isblank function for c90 compatibility */
+#undef  isblank
+#define isblank(character)		(character == ' ' || character == '\t')
+
+
+/* global variables for saving information about the current state of the */
+/* scanner. */
 static char currentCharacter;
 static char previousCharacter;
 static int currentSymbol;
@@ -69,25 +75,25 @@ static int currentColumn;
 static FILE *file;
 
 
-// Get the next character.
-// -----------------------------------------------------------------------------
-// Read the next character from inputFile and store it in currentCharacter.
-// -----------------------------------------------------------------------------
+/* Get the next character.                                                    */
+/*----------------------------------------------------------------------------*/
+/* Read the next character from inputFile and store it in currentCharacter.   */
+/*----------------------------------------------------------------------------*/
 void	getNextCharacter()
 {
 	do
 	{
-		// read next character
+		/* read next character */
 		previousCharacter = currentCharacter;
 		currentCharacter = fgetc(file);
 
-		// skip second line break character if there is one
+		/* skip second line break character if there is one */
 		if((previousCharacter == '\r') && (currentCharacter == '\n'))
 		{
 			currentCharacter = fgetc(file);
 		}
 
-		// check if a new line was found
+		/* check if a new line was found */
 		if((previousCharacter == '\r') || (previousCharacter == '\n'))
 		{
 			currentLine++;
@@ -97,7 +103,7 @@ void	getNextCharacter()
 	}
 	while(isblank(currentCharacter));
 
-	// read the rest of the line if a comment was found
+	/* read the rest of the line if a comment was found */
 	if(currentCharacter == '!')
 	{
 		fgets(commentBuffer, BUFSIZ, file);
@@ -106,15 +112,15 @@ void	getNextCharacter()
 }
 
 
-// Initialize the scanner.
-// -----------------------------------------------------------------------------
-// This function must be called once before using the scanner.
-// IN fileName: File to be read by the scanner.
-// RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.
-// -----------------------------------------------------------------------------
+/* Initialize the scanner.                                                    */
+/*----------------------------------------------------------------------------*/
+/* This function must be called once before using the scanner.                */
+/* IN fileName: File to be read by the scanner.                               */
+/* RETURNS: EXIT_FAILURE if a failure occurred, EXIT_SUCCESS otherwise.       */
+/*----------------------------------------------------------------------------*/
 int	initializeScanner(char *fileName)
 {
-	// open the input file
+	/* open the input file */
 	file = fopen(fileName, "r");
 	if(file == NULL)
 	{
@@ -123,7 +129,7 @@ int	initializeScanner(char *fileName)
 		return EXIT_FAILURE;
 	}
 
-	// initialize line and column number
+	/* initialize line and column number */
 	currentLine = 1;
 	currentColumn = 0;
 	currentCharacter = '\0';
@@ -134,31 +140,31 @@ int	initializeScanner(char *fileName)
 }
 
 
-// Dispose the scanner.
-// -----------------------------------------------------------------------------
-// This function must be called once if the scanner is no longer used.
-// -----------------------------------------------------------------------------
+/* Dispose the scanner.                                                       */
+/*----------------------------------------------------------------------------*/
+/* This function must be called once if the scanner is no longer used.        */
+/*----------------------------------------------------------------------------*/
 void	disposeScanner()
 {
-	// close the input file
+	/* close the input file */
 	fclose(file);
 }
 
 
-// Scan and return the next symbol.
-// -----------------------------------------------------------------------------
-// RETURNS: Symbol that has been scanned.
-// -----------------------------------------------------------------------------
+/* Scan and return the next symbol.                                           */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Symbol that has been scanned.                                     */
+/*----------------------------------------------------------------------------*/
 int	scanNextSymbol()
 {
 	int i;
 
 
-	// remember current position
+	/* remember current position */
 	currentSymbolLine = currentLine;
 	currentSymbolColumn = currentColumn;
 
-	// check if the character is a newline symbol
+	/* check if the character is a newline symbol */
 	if((currentCharacter == '\r') || (currentCharacter == '\n'))
 	{
 		getNextCharacter();
@@ -166,7 +172,7 @@ int	scanNextSymbol()
 		return currentSymbol;
 	}
 
-	// check if the end of file is reached
+	/* check if the end of file is reached */
 	if(currentCharacter == EOF)
 	{
 		currentSymbol = EOF_SYM;
@@ -174,34 +180,34 @@ int	scanNextSymbol()
 	}
 
 
-	// check if the character is a terminal symbol
+	/* check if the character is a terminal symbol */
 	currentSymbol=0;
 	while((terminalSymList[currentSymbol] != currentCharacter) && 
 				(terminalSymList[currentSymbol] != '\0'))
 		currentSymbol++;
 
-	// return the terminal symbol if one was found
+	/* return the terminal symbol if one was found */
 	if(terminalSymList[currentSymbol] != '\0')
 	{
 		getNextCharacter();
 		return currentSymbol;
 	}
 
-	// check if the character is a hex or dec number
+	/* check if the character is a hex or dec number */
 	if(isdigit(currentCharacter))
 	{
 		currentNumberValue = 0;
 
-		// if the first digit is a 0 it might be a hex number
+		/* if the first digit is a 0 it might be a hex number */
 		if(currentCharacter == '0')
 		{
-			// if the next character is a 'x',
-			// a hex number was found
+			/* if the next character is a 'x', */
+			/* a hex number was found */
 			getNextCharacter();
 			if(tolower(currentCharacter) == 'x')
 			{
-				// check if the 'x' is followed by a hex digit
-				// and otherwise return an unknown symbol
+				/* check if the 'x' is followed by a hex digit*/
+				/* and otherwise return an unknown symbol */
 				getNextCharacter();
 				if(!isxdigit(currentCharacter))
 				{
@@ -209,20 +215,20 @@ int	scanNextSymbol()
 					return currentSymbol;
 				}
 
-				// put together the hexadecimal number 
-				// by using the horner scheme
+				/* put together the hexadecimal number */ 
+				/* by using the horner scheme */
 				while(isxdigit(currentCharacter))
 				{
 					if(isdigit(currentCharacter))
 					{
-						// add one of the digits 0-9
+						/* add one of the digits 0-9 */
 						currentNumberValue *= 16;
 						currentNumberValue += 
 							currentCharacter-'0';
 					}
 					else
 					{
-						// add one of the digits A-F
+						/* add one of the digits A-F */
 						currentNumberValue *= 16; 
 						currentNumberValue += 
 							currentCharacter-'A'+10;
@@ -235,12 +241,12 @@ int	scanNextSymbol()
 			}
 		}
 
-		// if no hex number was found and currentCharacter is a digit,
-		// a decimal number was found
+		/* if no hex number was found and currentCharacter is a digit,*/
+		/* a decimal number was found */
 		if(isdigit(currentCharacter))
 		{
-			// put together the decimal number 
-			// by using the horner scheme
+			/* put together the decimal number */
+			/* by using the horner scheme */
 			while(isdigit(currentCharacter))
 			{
 				currentNumberValue *= 10;
@@ -253,7 +259,7 @@ int	scanNextSymbol()
 		return currentSymbol;
 	}
 
-	// check if the character is part of an ident
+	/* check if the character is part of an ident */
 	if(isalpha(currentCharacter))
 	{
 		i=0;
@@ -262,7 +268,7 @@ int	scanNextSymbol()
 		getNextCharacter();
 		i++;
 
-		// put together ident
+		/* put together ident */
 		while((i < MAX_IDENT_LENGTH - 1) && (isalnum(currentCharacter)))
 		{
 			currentIdentName[i] = tolower(currentCharacter);
@@ -271,7 +277,7 @@ int	scanNextSymbol()
 		}
 		currentIdentName[i] = '\0';
 
-		// return IDENT_SYM if the maximum length has not been exceeded
+		/* return IDENT_SYM if the maximum length hasn't been exceeded*/
 		if(!isalnum(currentCharacter))
 		{
 			currentSymbol = IDENT_SYM;
@@ -279,18 +285,18 @@ int	scanNextSymbol()
 		}
 	}
 
-	// return UNKNOWN_SYM if an unexpected character or 
-	// a too long ident was found
+	/* return UNKNOWN_SYM if an unexpected character or */
+	/* a too long ident was found */
 	getNextCharacter();
 	currentSymbol = UNKNOWN_SYM;
 	return currentSymbol;
 }
 
 
-// Scan and return the next symbol and skip newline symbols.
-// -----------------------------------------------------------------------------
-// RETURNS: Symbol that has been scanned.
-// -----------------------------------------------------------------------------
+/* Scan and return the next symbol and skip newline symbols.                  */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Symbol that has been scanned.                                     */
+/*----------------------------------------------------------------------------*/
 int	scanNextSymbolSkipNewline()
 {
 	do
@@ -303,52 +309,54 @@ int	scanNextSymbolSkipNewline()
 }
 
 
-// Get the current symbol.
-// -----------------------------------------------------------------------------
-// RETURNS: Current symbol.
-// -----------------------------------------------------------------------------
+/* Get the current symbol.                                                    */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Current symbol.                                                   */
+/*----------------------------------------------------------------------------*/
 int	getCurrentSymbol()
 {
 	return currentSymbol;
 }
 
 
-// Get the name of the current ident.
-// -----------------------------------------------------------------------------
-// RETURNS: Name of the current ident.
-// If the current symbol is not an ident, the returned string is unpredictable.
-// -----------------------------------------------------------------------------
+/* Get the name of the current ident.                                         */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Name of the current ident.                                        */
+/* If the current symbol is not an ident, the returned string is              */
+/* unpredictable.                                                             */
+/*----------------------------------------------------------------------------*/
 char *	getCurrentIdentName()
 {
 	return currentIdentName;
 }
 
 
-// Get the value of the current number.
-// -----------------------------------------------------------------------------
-// RETURNS: Value of the current number.
-// If the current symbol is not a number, the returned value is unpredictable.
-// -----------------------------------------------------------------------------
+/* Get the value of the current number.                                       */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Value of the current number.                                      */
+/* If the current symbol is not a number, the returned value is               */
+/* unpredictable.                                                             */
+/*----------------------------------------------------------------------------*/
 uint32_64_t	getCurrentNumberValue()
 {
 	return currentNumberValue;
 }
 
 
-// Get the number of the current line.
-// -----------------------------------------------------------------------------
-// RETURNS: Number of the current line.
-// -----------------------------------------------------------------------------
+/* Get the number of the current line.                                        */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Number of the current line.                                       */
+/*----------------------------------------------------------------------------*/
 int	getCurrentLine()
 {
 	return currentSymbolLine;
 }
 
 
-// Get the number of the current column.
-// -----------------------------------------------------------------------------
-// RETURNS: Number of the current column.
-// -----------------------------------------------------------------------------
+/* Get the number of the current column.                                      */
+/*----------------------------------------------------------------------------*/
+/* RETURNS: Number of the current column.                                     */
+/*----------------------------------------------------------------------------*/
 int	getCurrentColumn()
 {
 	return currentSymbolColumn;

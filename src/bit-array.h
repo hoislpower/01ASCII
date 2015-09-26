@@ -49,9 +49,9 @@
 
 
 extern	int	initializeBitArray(int);
-extern	void	disposeBitArray();
-extern	int8_t*	getBitArray();
-extern	int	bitArrayGetCurrentIndex();
+extern	void	disposeBitArray(void);
+extern	int8_t*	getBitArray(void);
+extern	int	bitArrayGetCurrentIndex(void);
 extern	int	bitArrayAdd(int8_t, int8_t);
 extern	int	bitArrayRepeat(int, int, int);
 
